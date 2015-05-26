@@ -1,10 +1,10 @@
-(defproject de.otto/tesla-microservice "0.1.11"
-            :description "basic microservice."
+(defproject gorillalabs/tesla-microservice "0.2.0-SNAPSHOT"
+            :description "basic microservice, fork of https://github.com/otto-de/tesla-microservice"
             :url "https://github.com/otto-de/tesla-microservice"
-            :license { :name "Apache License 2.0" 
-                       :url "http://www.apache.org/license/LICENSE-2.0.html"}
+            :license {:name "Eclipse Public License"
+                      :url  "http://www.eclipse.org/legal/epl-v10.html"}
             :scm { :name "git"
- 	           :url "https://github.com/otto-de/tesla-microservice"}
+      	           :url "https://github.com/gorillalabs/tesla-microservice"}
             :dependencies [[org.clojure/clojure "1.6.0"]
                            [com.stuartsierra/component "0.2.2"]
                            [org.clojure/core.cache "0.6.4"]
@@ -26,37 +26,16 @@
 
                            ;; logging
                            [org.clojure/tools.logging "0.3.0"]
-                           [org.slf4j/slf4j-api "1.7.7"]
-                           [ch.qos.logback/logback-core "1.1.2"]
-                           [ch.qos.logback/logback-classic "1.1.2"]
-                           [net.logstash.logback/logstash-logback-encoder "3.4"]
-
-                           ;; testing
-                           [ring-mock "0.1.5"]
-                           [http-kit.fake "0.2.1"]]
-
-            :exclusions [org.clojure/clojure
-                         org.slf4j/slf4j-nop
-                         org.slf4j/slf4j-log4j12
-                         log4j
-                         commons-logging/commons-logging]
+                           ]
 
             :plugins [[lein-marginalia "0.8.0"]
                       [lein-environ "1.0.0"]]
-            :main ^:skip-aot de.otto.tesla.example.example-system
-            :aot [de.otto.tesla.util.escapingmessageconverter]
-            :clean-targets [:target-path :compile-path "target"]
-            :source-paths ["src" "example/src"]
-            :java-source-paths ["src/java"]
-            :test-selectors {:default     (constantly true)
-                             :integration :integration
-                             :unit        :unit
-                             :all         (constantly true)}
-            :profiles {:test {:aot [de.otto.tesla.util.escapingmessageconverter]
-                              :env {:metering-reporter "console"
+            :profiles {:test {:env {:metering-reporter "console"
                                     :import-products   "false"
                                     :server-port       "9991"
-                                    :cache-dir         "/tmp"}}
-                       :meta {:env {:app-name :tesla-meta}}
-                       :uberjar {:aot :all}}
-            :test-paths ["test" "test-resources" "example/test"])
+                                    :cache-dir         "/tmp"}
+                              :resource-paths ["test-resources"]
+                              :dependencies [[ring-mock "0.1.5"]
+                                             [http-kit.fake "0.2.1"]]
+                              }
+                       :uberjar {:aot :all}})
