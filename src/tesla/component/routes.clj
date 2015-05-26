@@ -1,4 +1,4 @@
-(ns de.otto.tesla.stateful.routes
+(ns tesla.component.routes
   (:require [com.stuartsierra.component :as component]
             [clojure.tools.logging :as log]
             [compojure.core :as c]))

@@ -1,4 +1,4 @@
-(ns de.otto.tesla.stateful.metering
+(ns tesla.component.metering
   (:require
     [com.stuartsierra.component :as component]
     [metrics.core :as metrics]
@@ -8,34 +8,34 @@
     [metrics.reporters.graphite :as graphite]
     [metrics.reporters.console :as console]
     [clojure.tools.logging :as log]
-    [de.otto.tesla.stateful.configuring :as configuring])
+    [tesla.component.configuring :as configuring])
   (:import
     (com.codahale.metrics MetricFilter)
     (java.util.concurrent TimeUnit)))
 
 (defn prefix [config]
-  (str (:graphite-prefix (:config config)) "." (configuring/external-hostname config)))
+  (str (:graphite-prefix (:metering (:config config)))))
 
 (defn- start-graphite! [registry config]
   (let [reporter (graphite/reporter registry
-                                    {:host          (:graphite-host (:config config))
-                                     :port          (Integer. (:graphite-port (:config config)))
+                                    {:host          (:graphite-host (:metering (:config config)))
+                                     :port          (Integer. (:graphite-port (:metering (:config config))))
                                      :prefix        (prefix config)
                                      :rate-unit     TimeUnit/SECONDS
                                      :duration-unit TimeUnit/MILLISECONDS
                                      :filter        MetricFilter/ALL})]
     (log/info "-> starting graphite reporter.")
-    (graphite/start reporter (Integer/parseInt (:graphite-interval-seconds (:config config))))
+    (graphite/start reporter (Integer/parseInt (:graphite-interval-seconds (:metering (:config config)))))
     reporter))
 
 (defn- start-console! [registry config]
   (let [reporter (console/reporter registry {})]
     (log/info "-> starting console reporter.")
-    (console/start reporter (Integer/parseInt (:console-interval-seconds (:config config))))
+    (console/start reporter (-> config :config :metering :console :interval))
     reporter))
 
 (defn- start-reporter! [registry config]
-  (case (:metering-reporter (:config config))
+  (case (:reporter (:metering (:config config)))
     "graphite" (start-graphite! registry config)
     "console" (start-console! registry config)))
 

@@ -1,9 +1,9 @@
-(ns de.otto.tesla.stateful.health-test
+(ns tesla.component.health-test
   (:require [clojure.test :refer :all]
-            [de.otto.tesla.stateful.health :as health]
-            [de.otto.tesla.util.test-utils :as u]
-            [de.otto.tesla.system :as system]
-            [de.otto.tesla.stateful.routes :as rts]
+            [tesla.component.health :as health]
+            [tesla.util.test-utils :as u]
+            [tesla.system :as system]
+            [tesla.component.routes :as rts]
             [ring.mock.request :as mock]))
 
 (defn- serverless-system [runtime-config]
@@ -38,7 +38,7 @@
                               :status  200})))))
 
   (testing "use the configuration url"
-    (u/with-started [started (serverless-system {:health-url "/my-health"})]
+    (u/with-started [started (serverless-system {:health {:path "/my-health"}})]
                     (let [handlers (rts/routes (:routes started))]
                       (is (= (handlers (mock/request :get "/my-health"))
                              {:body    "HEALTHY"

@@ -1,7 +1,8 @@
-(ns de.otto.tesla.stateful.serving
+(ns tesla.component.serving
   (:require [com.stuartsierra.component :as component]
-            [ring.adapter.jetty :as jetty]
-            [de.otto.tesla.stateful.routes :as rts]
+            [org.httpkit.server :refer [run-server]]
+            [tesla.component.routes :as rts]
+            [compojure.handler :refer [site]]
             [clojure.tools.logging :as log]))
 
 ;; The serving component is the frontend of the system.
@@ -11,15 +12,15 @@
   component/Lifecycle
   (start [self]
     (log/info "-> starting server")
-    (let [port (Integer. (get-in config [:config :server-port]))
+    (let [port (Integer. (get-in config [:config :server :port]))
           all-routes (rts/routes routes)
-          server (jetty/run-jetty all-routes {:port port :join? false})]
-      (.setGracefulShutdown server 100)
+          server (run-server (site all-routes) {:ip (get-in config [:config :server :bind]) :port port})]
       (assoc self :server server)))
 
   (stop [self]
     (log/info "<- stopping server")
-    (.stop (:server self))
+    (when-let [server (:server self)]
+      (server))
     self))
 
 (defn new-server [] (map->Server {}))

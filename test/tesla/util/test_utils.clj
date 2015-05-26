@@ -1,4 +1,4 @@
-(ns de.otto.tesla.util.test-utils
+(ns tesla.util.test-utils
   (:require [clojure.test :refer :all]
             [com.stuartsierra.component :as comp]
             [ring.mock.request :as mock]))

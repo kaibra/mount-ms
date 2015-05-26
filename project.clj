@@ -8,6 +8,7 @@
             :dependencies [[org.clojure/clojure "1.6.0"]
                            [com.stuartsierra/component "0.2.3"]
                            [org.clojure/data.json "0.2.6"]
+                           [gorillalabs/config "1.0.0"]
                            [beckon "0.1.1"]
                            [overtone/at-at "1.2.0"]
                            [environ "1.0.0"]
@@ -16,10 +17,11 @@
                            [de.otto/status "0.1.0"]
 
                            ;; io
-                           [ring "1.3.2"]
+                           [ring/ring-core "1.3.2"]
                            [compojure "1.3.4"]
                            [metrics-clojure "2.5.1"]
                            [metrics-clojure-graphite "2.5.1"]
+                           [http-kit "2.1.18"]
 
                            ;; logging
                            [org.clojure/tools.logging "0.3.1"]
@@ -33,7 +35,8 @@
                               :dependencies [[ring-mock "0.1.5"]
                                              [http-kit.fake "0.2.2"]]
                               }
-                       :dev {:plugins [[lein-ancient "0.5.4"]
+                       :dev {:dependencies [[javax.servlet/servlet-api "2.5"]]
+                             :plugins [[lein-ancient "0.5.4"]
                                        [lein-marginalia "0.8.0"]
                                        [lein-environ "1.0.0"]]
 

@@ -1,8 +1,8 @@
-(ns de.otto.tesla.stateful.health
+(ns tesla.component.health
   (:require [com.stuartsierra.component :as component]
             [compojure.core :as c]
             [clojure.tools.logging :as log]
-            [de.otto.tesla.stateful.routes :as handlers]))
+            [tesla.component.routes :as handlers]))
 
 ;; http response for a healthy system
 (def healthy-response {:status  200
@@ -20,7 +20,7 @@
 
 (defn handlers
   [self]
-  [(c/GET (get-in self [:config :config :health-url] "/health") [_]
+  [(c/GET (get-in self [:config :config :health :path] "/health") [_]
      (health-response self))])
 
 (defn lock-application [self]

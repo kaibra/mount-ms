@@ -1,16 +1,15 @@
-(ns de.otto.tesla.stateful.metering-test
+(ns tesla.component.metering-test
   (:import (java.net UnknownHostException))
   (:require [clojure.test :refer :all]
-            [de.otto.tesla.stateful.metering :as metering]
-            [de.otto.tesla.util.test-utils :as u]
-            [de.otto.tesla.system :as system]
-            [de.otto.tesla.stateful.configuring :as configuring]))
+            [tesla.component.metering :as metering]
+            [tesla.util.test-utils :as u]
+            [tesla.system :as system]
+            [tesla.component.configuring :as configuring]))
 
 
 (deftest ^:unit should-return-prefix-for-testhost
-  (with-redefs-fn {#'configuring/external-hostname (fn [_] "testhost")}
-    #(is (= (metering/prefix {:config {:graphite-prefix "a_random_prefix"}})
-            "a_random_prefix.testhost"))))
+  #(is (= (metering/prefix {:config {:metering {:graphite-prefix "a_random_prefix"}}})
+          "a_random_prefix")))
 
 (deftest ^:unit the-metrics-lib-accepts-a-vector-for-building-the-name
   (is (= (metrics.core/metric-name ["some.name.foo.bar"])

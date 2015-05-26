@@ -1,13 +1,13 @@
-(ns de.otto.tesla.stateful.app-status-test
+(ns tesla.component.app-status-test
   (:require [clojure.test :refer :all]
-            [de.otto.tesla.stateful.app-status :as app-status]
+            [tesla.component.app-status :as app-status]
             [com.stuartsierra.component :as c]
             [environ.core :as env]
             [clojure.data.json :as json]
             [clojure.tools.logging :as log]
-            [de.otto.tesla.util.test-utils :as u]
-            [de.otto.tesla.system :as system]
-            [de.otto.tesla.stateful.routes :as rts]
+            [tesla.util.test-utils :as u]
+            [tesla.system :as system]
+            [tesla.component.routes :as rts]
             [ring.mock.request :as mock]
             [de.otto.status :as s]))
 

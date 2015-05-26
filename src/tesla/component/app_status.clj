@@ -1,4 +1,4 @@
-(ns de.otto.tesla.stateful.app-status
+(ns tesla.component.app-status
   (:require [com.stuartsierra.component :as component]
             [compojure.core :as c]
             [clojure.data.json :as json :only [write-str]]
@@ -6,11 +6,11 @@
             [clojure.string :as str]
             [clj-time.local :as local-time]
             [environ.core :as env]
-            [de.otto.tesla.stateful.routes :as handlers]
-            [de.otto.tesla.stateful.metering :as metering]
+            [tesla.component.routes :as handlers]
+            [tesla.component.metering :as metering]
             [de.otto.status :as s]
             [metrics.timers :as timers]
-            [de.otto.tesla.stateful.configuring :as configuring]))
+            [tesla.component.configuring :as configuring]))
 
 
 
@@ -25,8 +25,7 @@
 
 (defn system-infos [config]
   {:systemTime (local-time/format-local-time (local-time/local-now) :date-time-no-ms)
-   :hostname   (configuring/external-hostname config)
-   :port       (configuring/external-port config)})
+   })
 
 (defn sanitize-str [s]
   (apply str (repeat (count s) "*")))

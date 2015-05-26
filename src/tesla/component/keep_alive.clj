@@ -1,4 +1,4 @@
-(ns de.otto.tesla.stateful.keep-alive
+(ns tesla.component.keep-alive
   "This component is responsible for keeping the system alive."
   (:require [clojure.tools.logging :as log]
             [com.stuartsierra.component :as component]))

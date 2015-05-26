@@ -1,15 +1,15 @@
-(ns de.otto.tesla.system
+(ns tesla.system
   (:require [com.stuartsierra.component :as c]
-            [de.otto.tesla.stateful.serving :as serving]
-            [de.otto.tesla.stateful.app-status :as app-status]
-            [de.otto.tesla.stateful.health :as health]
-            [de.otto.tesla.stateful.configuring :as configuring]
-            [de.otto.tesla.stateful.metering :as metering]
-            [de.otto.tesla.stateful.keep-alive :as keep-alive]
+            [tesla.component.serving :as serving]
+            [tesla.component.app-status :as app-status]
+            [tesla.component.health :as health]
+            [tesla.component.configuring :as configuring]
+            [tesla.component.metering :as metering]
+            [tesla.component.keep-alive :as keep-alive]
             [beckon :as beckon]
             [clojure.tools.logging :as log]
             [environ.core :as env :only [env]]
-            [de.otto.tesla.stateful.routes :as routes]))
+            [tesla.component.routes :as routes]))
 
 (defn wait! [system]
   (if-let [wait-time (get-in system [:config :config :wait-ms-on-stop])]

@@ -1,9 +1,9 @@
-(ns de.otto.tesla.system-test
+(ns tesla.system-test
   (:require [clojure.test :refer :all]
             [com.stuartsierra.component :as c]
-            [de.otto.tesla.util.test-utils :as u]
+            [tesla.util.test-utils :as u]
 
-            [de.otto.tesla.system :as system]))
+            [tesla.system :as system]))
 
 (defn- serverless-system [runtime-config]
   (dissoc
