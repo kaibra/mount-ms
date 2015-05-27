@@ -26,13 +26,14 @@
   (log/info "<- Stopping system.")
   (c/stop system))
 
-(defn start-system [system]
+(defn start [system]
   (let [started (c/start system)]
     (doseq [sig ["INT" "TERM"]]
       (reset! (beckon/signal-atom sig) #{(partial stop started)}))
     started))
 
-(defn empty-system [runtime-config]
+
+(defn base-system [runtime-config]
   (c/system-map
     :keep-alive (keep-alive/new-keep-alive)
     :routes (routes/new-routes)
@@ -42,3 +43,6 @@
     :app-status (c/using (app-status/new-app-status) [:config :routes :metering])
     :server (c/using (serving/new-server) [:config :routes])))
 
+;; deprecated stuff
+(def empty-system base-system)
+(def start-system start)

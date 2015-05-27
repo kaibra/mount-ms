@@ -1,5 +1,5 @@
 (ns tesla.component.keep-alive
-  "This component is responsible for keeping the system alive."
+  "This component is responsible for keeping the system alive by creating a non-deamonized noop thread."
   (:require [clojure.tools.logging :as log]
             [com.stuartsierra.component :as component]))
 

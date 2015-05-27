@@ -2,12 +2,19 @@
   "This component is responsible for loading the configuration."
   (:require [com.stuartsierra.component :as component]
             [clojure.tools.logging :as log]
-            [tesla.util.keyword :as kwutil]
             [gorillalabs.config :as config]
-            [environ.core :as env :only [env]]))
+            [environ.core :as environ]))
+
+
+(defn config
+  ([config key-path]
+   (get-in (:config config) key-path))
+  ([config key-path default]
+   (get-in (:config config) key-path default)))
+
 
 (defn load-config []
-  (config/init))
+  (config/init (str (environ/env :system) "-" (environ/env :env))))
 
 ;; Load config on startup.
 (defrecord Configuring [runtime-config]
@@ -24,5 +31,7 @@
     self))
 
 (defn new-config [runtime-config] (map->Configuring {:runtime-config runtime-config}))
+
+
 
 
