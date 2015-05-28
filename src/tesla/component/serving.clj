@@ -1,7 +1,7 @@
 (ns tesla.component.serving
   (:require [com.stuartsierra.component :as component]
             [org.httpkit.server :refer [run-server]]
-            [tesla.component.routes :as rts]
+            [tesla.component.handler :as handler]
             [compojure.handler :refer [site]]
             [clojure.tools.logging :as log])
   (:import [clojure.lang RT]))
@@ -32,13 +32,13 @@
 ;; The serving component is the frontend of the system.
 ;; It accepts requests and returns the data to be used by consuming systems.
 ;; For the moment a simple, blocking implementation with an embedded jetty is chosen.
-(defrecord Server [config routes]
+(defrecord Server [config handler]
   component/Lifecycle
   (start [self]
     (log/info "-> starting server")
     (let [port (get-in config [:config :server :port] default-port)
-          all-routes (rts/routes routes)
-          server (run-server (site all-routes)
+          handler (handler/handler handler)
+          server (run-server handler
                              (assoc-if-not-nil
                                {:port port}
                                :ip (get-in config [:config :server :bind])

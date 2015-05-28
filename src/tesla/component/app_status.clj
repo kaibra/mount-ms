@@ -6,11 +6,12 @@
             [clojure.string :as str]
             [clj-time.local :as local-time]
             [environ.core :as env]
-            [tesla.component.routes :as handlers]
+            [tesla.component.handler :as handlers]
             [tesla.component.metering :as metering]
             [de.otto.status :as s]
             [metrics.timers :as timers]
-            [tesla.component.configuring :as configuring]))
+            [tesla.component.configuring :as configuring]
+            [ring.middleware.defaults :as ring-defaults]))
 
 
 
@@ -77,13 +78,18 @@
 (defn register-status-fun [self fun]
   (swap! (:status-functions self) #(conj % fun)))
 
-(defn handlers
+(defn make-handler
   [self]
-  [(c/GET (get-in self [:config :config :status-url] "/status") [_]
-          (status-response self))])
+  (c/routes (c/GET (get-in self [:config :config :status-url] "/status")
+                   []
+                   (-> (status-response self)
+                       (ring-defaults/wrap-defaults
+                         (assoc ring-defaults/site-defaults :session false
+                                                            :cookies false
+                                                            :proxy true))))))
 
 
-(defrecord ApplicationStatus [config routes metering]
+(defrecord ApplicationStatus [config handler metering]
   component/Lifecycle
   (start [self]
     (log/info "-> starting Application Status")
@@ -93,7 +99,7 @@
                      :status-aggregation (aggregation-strategy (:config config))
                      :status-functions (atom []))]
 
-      (handlers/register-routes routes (handlers new-self))
+      (handlers/register-handler handler (make-handler new-self))
       new-self))
 
   (stop [self]

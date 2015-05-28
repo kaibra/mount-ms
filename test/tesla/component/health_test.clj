@@ -3,7 +3,7 @@
             [tesla.component.health :as health]
             [tesla.util.test-utils :as u]
             [tesla.system :as system]
-            [tesla.component.routes :as rts]
+            [tesla.component.handler :as rts]
             [ring.mock.request :as mock]))
 
 (defn- serverless-system [runtime-config]

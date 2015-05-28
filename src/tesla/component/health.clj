@@ -2,7 +2,8 @@
   (:require [com.stuartsierra.component :as component]
             [compojure.core :as c]
             [clojure.tools.logging :as log]
-            [tesla.component.routes :as handlers]))
+            [tesla.component.handler :as handler]
+            [ring.middleware.defaults :as ring-defaults]))
 
 ;; http response for a healthy system
 (def healthy-response {:status  200
@@ -18,20 +19,29 @@
     unhealthy-response
     healthy-response))
 
-(defn handlers
+(defn make-handler
   [self]
-  [(c/GET (get-in self [:config :config :health :path] "/health") [_]
-     (health-response self))])
+  (c/routes (c/GET
+              (get-in self [:config :config :health :path] "/health")
+              []
+              (->
+                  (health-response self)
+                  (ring-defaults/wrap-defaults
+                    (assoc ring-defaults/site-defaults :session false
+                                                       :cookies false
+                                                       :proxy true))))))
 
 (defn lock-application [self]
   (reset! (:locked self) true))
 
-(defrecord Health [config routes]
+
+
+(defrecord Health [config handler]
   component/Lifecycle
   (start [self]
     (log/info "-> Starting healthcheck.")
     (let [new-self (assoc self :locked (atom false))]
-      (handlers/register-routes routes (handlers new-self))
+      (handler/register-handler handler (make-handler new-self)) ;; TODO: use config directly
       new-self))
 
   (stop [self]

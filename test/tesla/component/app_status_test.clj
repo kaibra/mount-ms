@@ -7,7 +7,7 @@
             [clojure.tools.logging :as log]
             [tesla.util.test-utils :as u]
             [tesla.system :as system]
-            [tesla.component.routes :as rts]
+            [tesla.component.handler :as rts]
             [ring.mock.request :as mock]
             [de.otto.status :as s]))
 

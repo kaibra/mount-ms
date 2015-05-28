@@ -18,6 +18,8 @@
 
                            ;; io
                            [ring/ring-core "1.3.2"]
+                           [ring/ring-defaults "0.1.5"]
+
                            [compojure "1.3.4"]
                            [metrics-clojure "2.5.1"]
                            [metrics-clojure-graphite "2.5.1"]
