@@ -13,16 +13,16 @@
    (get-in (:config config) key-path default)))
 
 
-(defn load-config []
+(defn load-config [self]
   (config/init (str (environ/env :system) "-" (environ/env :env))))
 
 ;; Load config on startup.
-(defrecord Configuring [runtime-config]
+(defrecord Configuring [runtime-config load-config-fn]
   component/Lifecycle
   (start [self]
     (log/info "-> loading configuration.")
-    (log/info runtime-config)
-    (assoc self :config (merge (load-config) runtime-config)
+    (log/info runtime-config load-config-fn)
+    (assoc self :config (merge (load-config-fn self) runtime-config)
                 :version {:version "test.version"
                           :commit  "test.githash"}))        ;; TODO: Alter versions!
 
@@ -30,8 +30,7 @@
     (log/info "<- stopping configuration.")
     self))
 
-(defn new-config [runtime-config] (map->Configuring {:runtime-config runtime-config}))
-
-
-
-
+(defn new-config [runtime-config & {:keys [load-config-fn] :or {load-config-fn load-config}}]
+  (map->Configuring {:runtime-config runtime-config
+                     :load-config-fn load-config-fn
+                     }))
