@@ -11,7 +11,7 @@
 
 (defn config
   ([config-component]
-   (:config config-component)) ;; DO NOT USE, THIS IS FOR LEGACY SUPPORT ONLY!
+   (:config config-component))
   ([config-component key-path]
    (get-in (:config config-component) key-path))
   ([config-component key-path default]
