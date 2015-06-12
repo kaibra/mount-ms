@@ -47,7 +47,7 @@
     s/strict-strategy))
 
 (defn create-complete-status [self]
-  (let [version-info (get-in self [:config :version]) ;; TODO: Make this a separate component to read stuff from MANIFEST.MF
+  (let [version-info (get-in self [:config :version])       ;; TODO: Make this a separate component to read stuff from MANIFEST.MF
         aggregate-strategy (:status-aggregation self)
         extra-info {:name          (config/config (:config self) [:name])
                     :version       (:version version-info)
@@ -81,14 +81,16 @@
 (defn make-handler
   [self]
   (let [status-path (config/config (:config self) [:status :path] "/status")]
-    (c/routes (-> (c/GET status-path
-                         []
-                    (status-response self))
-                  (ring-defaults/wrap-defaults
-                    (assoc ring-defaults/site-defaults :session false
-                                                       :cookies false
-                                                       :static false
-                                                       :proxy true))))))
+    (c/routes (c/GET status-path
+                     []
+                (-> (c/GET status-path
+                           []
+                      (status-response self))
+                    (ring-defaults/wrap-defaults
+                      (assoc ring-defaults/site-defaults :session false
+                                                         :cookies false
+                                                         :static false
+                                                         :proxy true)))))))
 
 
 

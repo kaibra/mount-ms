@@ -23,14 +23,17 @@
 (defn make-handler
   [self]
   (let [health-path (config/config (:config self) [:health :path] "/health")]
-    (c/routes (-> (c/GET health-path
-                         []
-                    (health-response self))
-                  (ring-defaults/wrap-defaults
-                    (assoc ring-defaults/site-defaults :session false
-                                                       :cookies false
-                                                       :static false
-                                                       :proxy true))))))
+    (c/routes (c/GET health-path
+                     []
+                (-> (c/GET health-path
+                           []
+                      (health-response self))
+                    (ring-defaults/wrap-defaults
+                      (assoc ring-defaults/site-defaults :session false
+                                                         :cookies false
+                                                         :static false
+                                                         :proxy true)))))))
+
 (defn lock-application [self]
   (reset! (:locked self) true))
 
