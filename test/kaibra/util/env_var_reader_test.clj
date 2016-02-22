@@ -1,5 +1,5 @@
-(ns de.otto.tesla.util.env-var-reader-test
-  (:require [de.otto.tesla.util.env_var_reader :as env-reader]
+(ns kaibra.util.env-var-reader-test
+  (:require [kaibra.util.env_var_reader :as env-reader]
             [clojure.test :refer :all]
             [environ.core :as env]))
 

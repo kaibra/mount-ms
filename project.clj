@@ -1,12 +1,12 @@
-(defproject de.otto/tesla-microservice "0.1.27"
-  :description "basic microservice."
-  :url "https://github.com/otto-de/tesla-microservice"
+(defproject kaibra/mount-ms "0.0.1"
+  :description "basic microservice based on mount, derived from de.otto/tesla-microservice."
+  :url "https://github.com/kaibra/mount-ms"
   :license {:name "Apache License 2.0"
             :url  "http://www.apache.org/license/LICENSE-2.0.html"}
   :scm {:name "git"
-        :url  "https://github.com/otto-de/tesla-microservice"}
+        :url  "https://github.com/kaibra/mount-ms"}
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [com.stuartsierra/component "0.3.1"]
+                 [mount "0.1.9"]
                  [clojurewerkz/propertied "1.2.0"]
                  [org.clojure/data.json "0.2.6"]
                  [beckon "0.1.1"]
@@ -36,9 +36,9 @@
                    :all         (constantly true)}
   :profiles {:uberjar {:aot :all}
              :dev     {:dependencies [[javax.servlet/servlet-api "2.5"]
-                                      [org.slf4j/slf4j-api "1.7.14"]
-                                      [ch.qos.logback/logback-core "1.1.3"]
-                                      [ch.qos.logback/logback-classic "1.1.3"]
+                                      [org.slf4j/slf4j-api "1.7.16"]
+                                      [ch.qos.logback/logback-core "1.1.5"]
+                                      [ch.qos.logback/logback-classic "1.1.5"]
                                       [ring-mock "0.1.5"]]
                        :plugins      [[lein-ancient "0.6.8"]
                                       [lein-environ "1.0.2"]]}}

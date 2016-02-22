@@ -1,4 +1,4 @@
-(ns de.otto.tesla.util.env_var_reader
+(ns kaibra.util.env_var_reader
   (:require [environ.core :as env]))
 
 (defn read-env-var

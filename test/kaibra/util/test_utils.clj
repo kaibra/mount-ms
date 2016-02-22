@@ -1,31 +1,33 @@
-(ns de.otto.tesla.util.test-utils
+(ns kaibra.util.test-utils
   (:require [clojure.test :refer :all]
-            [com.stuartsierra.component :as comp]
-            [ring.mock.request :as mock]))
+            [kaibra.stateful.app-status :as app-status]
+            [kaibra.stateful.configuring :as config]
+            [ring.mock.request :as mock]
+            [mount.core :as mnt]))
 
+(defmacro with-started-system [& body]
+  `(try
+     (mnt/start)
+     ~@body
+     (finally
+       (mnt/stop))))
 
-(defmacro with-started
-  "bindings => [name init ...]
+(defmacro with-started-system-states [states & body]
+  `(try
+     (apply mnt/start ~states)
+     ~@body
+     (finally
+       (apply mnt/stop ~states))))
 
-  Evaluates body in a try expression with names bound to the values
-  of the inits after (.start init) has been called on them. Finally
-  a clause calls (.stop name) on each name in reverse order."
-  [bindings & body]
-  (if (and
-        (vector? bindings) "a vector for its binding"
-        (even? (count bindings)) "an even number of forms in binding vector")
-    (cond
-      (= (count bindings) 0) `(do ~@body)
-      (symbol? (bindings 0)) `(let [~(bindings 0) (comp/start ~(bindings 1))]
-                                (try
-                                  (with-started ~(subvec bindings 2) ~@body)
-                                  (finally
-                                    (comp/stop ~(bindings 0)))))
-      :else (throw (IllegalArgumentException.
-                     "with-started-system only allows Symbols in bindings")))
-    (throw (IllegalArgumentException.
-             "not a vector or bindings-count is not even"))))
+(defmacro with-app-status [& body]
+  `(with-started-system-states [#'app-status/app-status #'config/config] ~@body))
 
+(defmacro with-config [& body]
+  `(with-started-system-states [#'config/config] ~@body))
+
+(defmacro with-runtime-config [runtime-conf & body]
+  `(with-redefs [config/runtime-config (constantly ~runtime-conf)]
+     ~@body))
 
 (defn merged-map-entry [request args k]
   (let [merged (merge (k request) (k args))]

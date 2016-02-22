@@ -1,4 +1,4 @@
-(ns de.otto.tesla.util.keyword
+(ns kaibra.util.keyword
   (:require [clojure.string :as str]))
 
 ;implementation is copied from environ 1.0.0
