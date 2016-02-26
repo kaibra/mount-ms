@@ -3,30 +3,37 @@
     [beckon :as beckon]
     [clojure.tools.logging :as log]
     [mount.core :as mnt]
-    [kaibra.stateful.health :refer [health] :as hlth]
-    [kaibra.stateful.configuring :refer [config] :as conf]
-    [kaibra.stateful.metering :refer [metering]]
-    [kaibra.stateful.keep-alive :refer [keep-alive]]
-    [kaibra.stateful.app-status :refer [app-status]]))
+    [kaibra.stateful.health :as health]
+    [kaibra.stateful.configuring :as config]
+    [kaibra.stateful.metering :as metering]
+    [kaibra.stateful.keep-alive :as keep-alive]
+    [kaibra.stateful.app-status :as app-status]))
+
+(def states
+  [#'metering/metering
+   #'keep-alive/keep-alive
+   #'app-status/app-status
+   #'config/config
+   #'health/health])
 
 (defn wait! []
-  (if-let [^String wait-time (conf/conf-prop :wait-ms-on-stop)]
+  (if-let [^String wait-time (config/conf-prop :wait-ms-on-stop)]
     (try
       (log/info "<- Waiting " wait-time " milliseconds.")
       (Thread/sleep (Integer. wait-time))
       (catch Exception e
         (log/error e)))))
 
-(defn stop []
+(defn stop [custom-states]
   (beckon/reinit-all!)
   (log/info "<- System will be stopped. Setting lock.")
-  (hlth/lock-application)
+  (health/lock-application)
   (wait!)
   (log/info "<- Stopping system.")
-  (mnt/stop))
+  (apply mnt/stop (concat states custom-states)))
 
-(defn start []
+(defn start [& custom-states]
   (log/info "-> Starting the MOUNT-MS base system")
-  (mnt/start)
+  (apply mnt/start (concat states custom-states))
   (doseq [sig ["INT" "TERM"]]
-    (reset! (beckon/signal-atom sig) #{stop})))
+    (reset! (beckon/signal-atom sig) #{(partial stop custom-states)})))
