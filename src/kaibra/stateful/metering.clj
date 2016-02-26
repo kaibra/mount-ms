@@ -9,7 +9,7 @@
     [metrics.reporters.graphite :as graphite]
     [metrics.reporters.console :as console]
     [clojure.tools.logging :as log]
-    [kaibra.transition.configuring :as tconf])
+    [kaibra.stateful.configuring :as conf])
   (:import
     (com.codahale.metrics MetricFilter)
     (java.util.concurrent TimeUnit)))
@@ -18,15 +18,15 @@
   (re-find #"[^.]*" hostname))
 
 (defn- graphite-host-prefix []
-  (let [external-hostname (tconf/external-hostname)
-        hostname (if (tconf/conf-prop :graphite-shorten-hostname?)
+  (let [external-hostname (conf/external-hostname)
+        hostname (if (conf/conf-prop :graphite-shorten-hostname?)
                    (short-hostname external-hostname)
                    external-hostname)]
-    (str (tconf/conf-prop :graphite-prefix) "." hostname)))
+    (str (conf/conf-prop :graphite-prefix) "." hostname)))
 
 (defn graphite-conf []
-  {:host          (tconf/conf-prop :graphite-host)
-   :port          (Integer. (tconf/conf-prop :graphite-port))
+  {:host          (conf/conf-prop :graphite-host)
+   :port          (Integer. (conf/conf-prop :graphite-port))
    :prefix        (graphite-host-prefix)
    :rate-unit     TimeUnit/SECONDS
    :duration-unit TimeUnit/MILLISECONDS
@@ -36,17 +36,17 @@
   (let [graphite-conf (graphite-conf)
         reporter (graphite/reporter registry graphite-conf)]
     (log/info "-> starting graphite reporter:" graphite-conf)
-    (graphite/start reporter (Integer/parseInt (tconf/conf-prop :graphite-interval-seconds)))
+    (graphite/start reporter (Integer/parseInt (conf/conf-prop :graphite-interval-seconds)))
     reporter))
 
 (defn- start-console! [registry]
   (let [reporter (console/reporter registry {})]
     (log/info "-> starting console reporter.")
-    (console/start reporter (Integer/parseInt (tconf/conf-prop :console-interval-seconds)))
+    (console/start reporter (Integer/parseInt (conf/conf-prop :console-interval-seconds)))
     reporter))
 
 (defn- start-reporter! [registry]
-  (case (tconf/conf-prop :metering-reporter)
+  (case (conf/conf-prop :metering-reporter)
     "graphite" (start-graphite! registry)
     "console" (start-console! registry)
     nil                                                     ;; default: do nothing!

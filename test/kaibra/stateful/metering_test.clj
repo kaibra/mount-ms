@@ -1,12 +1,12 @@
 (ns kaibra.stateful.metering-test
   (:require [clojure.test :refer :all]
             [kaibra.stateful.metering :as metering]
-            [kaibra.transition.configuring :as tconf]
+            [kaibra.stateful.configuring :as conf]
             [kaibra.util.test-utils :as u]))
 
 (def graphite-host-prefix #'metering/graphite-host-prefix)
 (deftest ^:unit graphite-prefix-test
-  (with-redefs [tconf/external-hostname (constantly "testhost.example.com")]
+  (with-redefs [conf/external-hostname (constantly "testhost.example.com")]
     (testing "returns prefix for testhost"
       (u/with-runtime-config
         {:graphite-prefix "a-prefix"}
