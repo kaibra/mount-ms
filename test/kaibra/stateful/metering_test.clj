@@ -2,7 +2,7 @@
   (:require [clojure.test :refer :all]
             [kaibra.stateful.metering :as metering]
             [kaibra.stateful.configuring :as conf]
-            [kaibra.util.test-utils :as u]
+            [test.kaibra.utils :as u]
             [kaibra.stateful.metering :as met]
             [metrics.timers :as timers])
   (:import (com.codahale.metrics MetricRegistry)))

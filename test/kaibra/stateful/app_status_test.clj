@@ -1,7 +1,7 @@
 (ns kaibra.stateful.app-status-test
   (:require [clojure.test :refer :all]
             [kaibra.stateful.app-status :as app-status]
-            [kaibra.util.test-utils :as u]
+            [test.kaibra.utils :as u]
             [de.otto.status :as s]
             [ring.mock.request :as mock]
             [clojure.data.json :as json]))

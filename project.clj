@@ -23,6 +23,7 @@
                  [metrics-clojure-graphite "2.6.1"]
 
                  [org.clojure/tools.logging "0.3.1"]]
+  :filespecs [{:type :paths :paths ["test-utils"]}]
 
   :exclusions [org.clojure/clojure
                org.slf4j/slf4j-nop
@@ -42,4 +43,4 @@
                                       [ring-mock "0.1.5"]]
                        :plugins      [[lein-ancient "0.6.8"]
                                       [lein-environ "1.0.2"]]}}
-  :test-paths ["test" "test-resources"])
+  :test-paths ["test" "test-resources" "test-utils"])

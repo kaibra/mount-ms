@@ -3,7 +3,7 @@
     [clojure.test :refer :all]
     [kaibra.stateful.health :as health]
     [ring.mock.request :as mock]
-    [kaibra.util.test-utils :as u]))
+    [test.kaibra.utils :as u]))
 
 (deftest ^:unit should-turn-unhealthy-when-locked
   (u/with-started-system

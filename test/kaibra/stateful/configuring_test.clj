@@ -2,7 +2,7 @@
   (:require [clojure.test :refer :all]
             [kaibra.stateful.configuring :as conf]
             [clojure.java.io :as io]
-            [kaibra.util.test-utils :as u]
+            [test.kaibra.utils :as u]
             [environ.core :as env]))
 
 (def load-config-from-property-files #'conf/load-config-from-property-files)

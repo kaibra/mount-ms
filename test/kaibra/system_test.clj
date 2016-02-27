@@ -2,9 +2,7 @@
   (:require [clojure.test :refer :all]
             [kaibra.system :as system]
             [mount.core :as mnt]
-            [kaibra.stateful.health :refer [health]]
-            [kaibra.util.test-utils :as u]
-            [kaibra.stateful.configuring :as config]))
+            [kaibra.stateful.health :refer [health]]))
 
 (deftest ^:unit should-start-base-system-and-shut-it-down
   (testing "start then shutdown using own method"
