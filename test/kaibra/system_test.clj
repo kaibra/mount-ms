@@ -3,7 +3,8 @@
             [kaibra.system :as system]
             [mount.core :as mnt]
             [kaibra.stateful.health :refer [health]]
-            [kaibra.util.test-utils :as u]))
+            [kaibra.util.test-utils :as u]
+            [kaibra.stateful.configuring :as config]))
 
 (deftest ^:unit should-start-base-system-and-shut-it-down
   (testing "start then shutdown using own method"
@@ -15,14 +16,6 @@
     (mnt/start)
     (mnt/stop)
     (is (= "look ma, no exceptions" "look ma, no exceptions"))))
-
-;(deftest should-lock-application-on-shutdown
-;  (testing "the lock is set"
-;    (u/with-runtime-config
-;      {:wait-ms-on-stop 10}
-;      (system/start)
-;      (system/stop)
-;      (is (= @(:locked health) true)))))
 
 ;
 ;  (testing "it waits on stop"

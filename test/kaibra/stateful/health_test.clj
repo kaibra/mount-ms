@@ -27,8 +27,7 @@
              "HEALTHY"))))
 
   (testing "use the configuration url"
-    (u/with-runtime-config
-      {:health-url "/my-health"}
-      (u/with-started-system
-        (is (= (:body ((health/health-handler) (mock/request :get "/my-health")))
-               "HEALTHY"))))))
+    (u/with-started-system
+      :runtime-config {:health-url "/my-health"}
+      (is (= (:body ((health/health-handler) (mock/request :get "/my-health")))
+             "HEALTHY")))))

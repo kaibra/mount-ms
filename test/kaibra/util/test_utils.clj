@@ -1,33 +1,38 @@
 (ns kaibra.util.test-utils
   (:require [clojure.test :refer :all]
-            [kaibra.stateful.app-status :as app-status]
             [kaibra.stateful.configuring :as config]
+            [environ.core :as env]
+            [kaibra.system :refer [the-states]]
             [ring.mock.request :as mock]
             [mount.core :as mnt]))
 
+(defn state-lookup [s]
+  (if (keyword? s)
+    (the-states s)
+    s))
+
+(defmacro start-and-stop-states [states & body]
+  `(try
+     (apply mnt/start (map state-lookup ~states))
+     ~@body
+     (finally
+       (apply mnt/stop (map state-lookup ~states)))))
+
+(defmacro with-states [states & args]
+  (let [mocked-call (fn [s]
+                         `(with-redefs-fn {~s ~(second args)}
+                            #(with-states ~states ~@(rest (rest args)))))]
+    (cond
+      (and (= :runtime-config (first args)) (second args))
+      (mocked-call #'config/runtime-config)
+
+      (and (= :env (first args)) (second args))
+      (mocked-call #'env/env)
+
+      :default `(start-and-stop-states ~states ~@args))))
+
 (defmacro with-started-system [& body]
-  `(try
-     (mnt/start)
-     ~@body
-     (finally
-       (mnt/stop))))
-
-(defmacro with-started-system-states [states & body]
-  `(try
-     (apply mnt/start ~states)
-     ~@body
-     (finally
-       (apply mnt/stop ~states))))
-
-(defmacro with-app-status [& body]
-  `(with-started-system-states [#'app-status/app-status #'config/config] ~@body))
-
-(defmacro with-config [& body]
-  `(with-started-system-states [#'config/config] ~@body))
-
-(defmacro with-runtime-config [runtime-conf & body]
-  `(with-redefs [config/runtime-config (constantly ~runtime-conf)]
-     ~@body))
+  `(with-states (keys ~the-states) ~@body))
 
 (defn merged-map-entry [request args k]
   (let [merged (merge (k request) (k args))]

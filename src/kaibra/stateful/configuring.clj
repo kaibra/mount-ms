@@ -43,12 +43,11 @@
     (merge (load-config-from-edn-files) runtime-config)
     (merge (load-config-from-property-files) runtime-config)))
 
-(defn- runtime-config []
-  {})
+(def runtime-config {})
 
 (defn start-configuring []
   (log/info "-> start config")
-  (let [conf {:config  (load-and-merge (runtime-config))
+  (let [conf {:config  (load-and-merge runtime-config)
               :version (load-properties "version.properties" :properties)}]
     conf))
 

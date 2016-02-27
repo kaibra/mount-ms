@@ -11,18 +11,16 @@
 (deftest ^:unit graphite-prefix-test
   (with-redefs [conf/external-hostname (constantly "testhost.example.com")]
     (testing "returns prefix for testhost"
-      (u/with-runtime-config
-        {:graphite-prefix "a-prefix"}
-        (u/with-config
-          (is (= "a-prefix.testhost.example.com"
-                 (graphite-host-prefix))))))
+      (u/with-states [:config]
+                     :runtime-config {:graphite-prefix "a-prefix"}
+                     (is (= "a-prefix.testhost.example.com"
+                            (graphite-host-prefix)))))
     (testing "returns prefix for testhost2"
-      (u/with-runtime-config
-        {:graphite-shorten-hostname? true
-         :graphite-prefix            "a-prefix"}
-        (u/with-config
+      (u/with-states [:config]
+                     :runtime-config {:graphite-shorten-hostname? true
+                                      :graphite-prefix            "a-prefix"}
           (is (= "a-prefix.testhost"
-                 (graphite-host-prefix))))))))
+                 (graphite-host-prefix)))))))
 
 (deftest ^:unit the-metrics-lib-accepts-a-vector-for-building-the-name
   (is (= (metrics.core/metric-name ["some.name.foo.bar"])
