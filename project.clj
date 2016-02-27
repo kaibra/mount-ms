@@ -1,4 +1,4 @@
-(defproject kaibra/mount-ms "0.0.2"
+(defproject kaibra/mount-ms "0.0.3"
   :description "basic microservice based on mount, derived from de.otto/tesla-microservice."
   :url "https://github.com/kaibra/mount-ms"
   :license {:name "Apache License 2.0"
