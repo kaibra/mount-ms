@@ -3,7 +3,6 @@
     <contextName>tesla</contextName>
 
 
-
     <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
         <append>true</append>
         <encoder>

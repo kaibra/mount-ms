@@ -23,7 +23,7 @@
         </triggeringPolicy>
 
         <encoder>
-            <pattern>%d{ISO8601} %-5p logger=%c thread=%t  msg="%m"%n</pattern>
+            <pattern>%d{ISO8601} %-5p logger=%c thread=%t msg="%m"%n</pattern>
         </encoder>
     </appender>
 

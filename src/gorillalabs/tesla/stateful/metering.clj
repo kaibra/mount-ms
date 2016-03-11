@@ -38,7 +38,7 @@
   (case (:metering-reporter (:config config))
     "graphite" (start-graphite! registry config)
     "console" (start-console! registry config)
-    nil ;; default: do nothing!
+    nil                                                     ;; default: do nothing!
     ))
 
 (defprotocol PubMetering
@@ -52,9 +52,9 @@
   (start [self]
     (log/info "-> starting metering.")
     (let [registry (metrics/new-registry)]
-        (assoc self
-               :registry registry
-               :reporter (start-reporter! registry config))))
+      (assoc self
+        :registry registry
+        :reporter (start-reporter! registry config))))
   (stop [self]
     (log/info "<- stopping metering")
     (when-let [reporter (:reporter self)]
