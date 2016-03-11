@@ -9,11 +9,11 @@
     </appender>
 
     <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log_location}/de.otto.tesla.log</file>
+        <file>${log_location}/gorillalabs.tesla.log</file>
         <append>true</append>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <fileNamePattern>${log_location}/de.otto.tesla.log.%i</fileNamePattern>
+            <fileNamePattern>${log_location}/gorillalabs.tesla.log.%i</fileNamePattern>
             <minIndex>1</minIndex>
             <maxIndex>5</maxIndex>
         </rollingPolicy>

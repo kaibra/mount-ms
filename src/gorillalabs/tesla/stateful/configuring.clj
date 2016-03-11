@@ -1,4 +1,4 @@
-(ns de.otto.tesla.stateful.configuring
+(ns gorillalabs.tesla.tesla.stateful.configuring
   "This component is responsible for loading the configuration."
   (:require [com.stuartsierra.component :as component]
             [clojure.tools.logging :as log]

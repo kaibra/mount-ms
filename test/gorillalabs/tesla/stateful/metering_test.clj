@@ -1,9 +1,9 @@
-(ns de.otto.tesla.stateful.metering-test
+(ns gorillalabs.tesla.stateful.metering-test
   (:require [clojure.test :refer :all]
-            [de.otto.tesla.stateful.metering :as metering]
-            [de.otto.tesla.util.test-utils :as u]
-            [de.otto.tesla.system :as system]
-            [de.otto.tesla.stateful.configuring :as configuring]))
+            [gorillalabs.tesla.stateful.metering :as metering]
+            [gorillalabs.tesla.util.test-utils :as u]
+            [gorillalabs.tesla.system :as system]
+            [gorillalabs.tesla.stateful.configuring :as configuring]))
 
 
 (deftest ^:unit should-return-prefix-for-testhost

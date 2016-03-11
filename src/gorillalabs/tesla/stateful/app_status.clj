@@ -1,4 +1,4 @@
-(ns de.otto.tesla.stateful.app-status
+(ns gorillalabs.tesla.stateful.app-status
   (:require [com.stuartsierra.component :as component]
             [compojure.core :as c]
             [clojure.data.json :as json :only [write-str]]
@@ -6,11 +6,11 @@
             [clojure.string :as str]
             [clj-time.local :as local-time]
             [environ.core :as env]
-            [de.otto.tesla.stateful.handler :as handlers]
-            [de.otto.tesla.stateful.metering :as metering]
-            [de.otto.status :as s]
+            [gorillalabs.tesla.stateful.handler :as handlers]
+            [gorillalabs.tesla.stateful.metering :as metering]
+            [gorillalabs.status :as s]
             [metrics.timers :as timers]
-            [de.otto.tesla.stateful.configuring :as config]
+            [gorillalabs.tesla.stateful.configuring :as config]
             [ring.middleware.defaults :as ring-defaults]))
 
 

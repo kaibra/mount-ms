@@ -1,8 +1,8 @@
-(ns de.otto.tesla.system-test
+(ns gorillalabs.tesla.system-test
   (:require [clojure.test :refer :all]
             [com.stuartsierra.component :as c]
-            [de.otto.tesla.util.test-utils :as u]
-            [de.otto.tesla.system :as system]))
+            [gorillalabs.tesla.util.test-utils :as u]
+            [gorillalabs.tesla.system :as system]))
 
 
 (deftest ^:unit should-start-base-system-and-shut-it-down

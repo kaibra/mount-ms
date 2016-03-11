@@ -1,4 +1,4 @@
-(ns de.otto.tesla.stateful.keep-alive
+(ns gorillalabs.tesla.stateful.keep-alive
   "This component is responsible for keeping the system alive by creating a non-deamonized noop thread."
   (:require [clojure.tools.logging :as log]
             [com.stuartsierra.component :as component]))

@@ -12,6 +12,23 @@ This is the common basis for some of otto.de's microservices. It is written in c
 
 _tesla-microservice_ is used for a number of different services now. Still it is a work in progress. See [CHANGES.md](./CHANGES.md) for instructions on breaking changes.
 
+-```clj
+-(ns kaibra.ms-example
+-  (:require
+-    [kaibra.system :as mount-ms]
+-    [clojure.tools.logging :as log]
+-    [kaibra.stateful.server :as server])
+-  (:gen-class))
++_tesla-microservice_ is used for a number of different services now. Still it is a work in progress. See [CHANGES.md](./CHANGES.md) for instructions on breaking changes.
+ 
+-(defn -main [& args]
+-  (log/info "Starting MS-EXAMPLE")
+-  (mount-ms/start-with-states
+-    #'server/server ;see ms-httpkit
+-    ;put your custom states you want to start with the mount-ms states here
+-    ))
+
+
 ## Features included
 
 * Load configuration from filesystem.

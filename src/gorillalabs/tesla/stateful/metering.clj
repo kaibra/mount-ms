@@ -1,4 +1,4 @@
-(ns de.otto.tesla.stateful.metering
+(ns gorillalabs.tesla.stateful.metering
   (:require
     [com.stuartsierra.component :as component]
     [metrics.core :as metrics]
@@ -8,7 +8,7 @@
     [metrics.reporters.graphite :as graphite]
     [metrics.reporters.console :as console]
     [clojure.tools.logging :as log]
-    [de.otto.tesla.stateful.configuring :as configuring])
+    [gorillalabs.tesla.stateful.configuring :as configuring])
   (:import
     (com.codahale.metrics MetricFilter)
     (java.util.concurrent TimeUnit)))

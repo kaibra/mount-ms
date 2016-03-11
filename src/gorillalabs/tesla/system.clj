@@ -1,14 +1,14 @@
-(ns de.otto.tesla.system
+(ns gorillalabs.tesla.system
   (:require [com.stuartsierra.component :as c]
-            [de.otto.tesla.stateful.app-status :as app-status]
-            [de.otto.tesla.stateful.health :as health]
-            [de.otto.tesla.stateful.configuring :as config]
-            [de.otto.tesla.stateful.metering :as metering]
-            [de.otto.tesla.stateful.keep-alive :as keep-alive]
+            [gorillalabs.tesla.stateful.app-status :as app-status]
+            [gorillalabs.tesla.stateful.health :as health]
+            [gorillalabs.tesla.stateful.configuring :as config]
+            [gorillalabs.tesla.stateful.metering :as metering]
+            [gorillalabs.tesla.stateful.keep-alive :as keep-alive]
             [beckon :as beckon]
             [clojure.tools.logging :as log]
             [environ.core :as env :only [env]]
-            [de.otto.tesla.stateful.handler :as handler]
+            [gorillalabs.tesla.stateful.handler :as handler]
             ))
 
 (defn wait! [system]

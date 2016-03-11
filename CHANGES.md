@@ -17,7 +17,7 @@ You do not need to change anything if you did not overwrite the default behaviou
 If you need to get info from the config component, there's a new function config for that.
 
 ### 0.1.15
-The function ```de.otto.tesla.system/start-system``` is renamed to ```start```, ```de.otto.tesla.system/empty-system``` is renamed to ```base-system```. 
+The function ```gorillalabs.tesla.system/start-system``` is renamed to ```start```, ```gorillalabs.tesla.system/empty-system``` is renamed to ```base-system```. 
 
 _tesla-microservice_ does not come with an embedded jetty server out of the box anymore. 
 
@@ -41,7 +41,7 @@ You can also use the ```->```-threading macro as demonstrated in the [mongo-exam
 The `routes`-component was abandoned in favour of the `handler`-component.
 In the ring library, handlers are the thing to push around (wrapping routes and middleware). You can choose your routing library now. Instead of [compojure](https://github.com/weavejester/compojure) you could also use e.g. [bidi](https://github.com/juxt/bidi).
 
-Change components relying on the old ```routes```-component should be trivial: Instead of adding a vector of (compojure)-routes using ```de.otto.tesla.stateful.routes/register-routes```,
+Change components relying on the old ```routes```-component should be trivial: Instead of adding a vector of (compojure)-routes using ```gorillalabs.tesla.stateful.routes/register-routes```,
 
 ```clojure
       (routes/register-routes
@@ -49,7 +49,7 @@ Change components relying on the old ```routes```-component should be trivial: I
         [(c/GET "/test" [] (test-fn))])
 ```
 
-just add a single ring handler using ```de.otto.tesla.stateful.handler/register-handler``` like this:
+just add a single ring handler using ```gorillalabs.tesla.stateful.handler/register-handler``` like this:
 
 ```clojure
       (handlers/register-handler
@@ -83,14 +83,14 @@ Specific logging-dependencies and the escaping-messageconverter have been remove
 in your ```logback.xml``` replace
 ```xml
 <conversionRule conversionWord="mescaped"
-                       converterClass="de.otto.tesla.util.escapingmessageconverter" />
+                       converterClass="gorillalabs.tesla.util.escapingmessageconverter" />
 ```
 
 with
 
 ```xml
 <conversionRule conversionWord="mescaped"
-                       converterClass="de.otto.util.escapingmessageconverter" />
+                       converterClass="gorillalabs.util.escapingmessageconverter" />
 ```
 
 

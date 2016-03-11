@@ -1,10 +1,10 @@
-(ns de.otto.tesla.stateful.health
+(ns gorillalabs.tesla.tesla.stateful.health
   (:require [com.stuartsierra.component :as component]
             [compojure.core :as c]
             [clojure.tools.logging :as log]
-            [de.otto.tesla.stateful.handler :as handler]
+            [gorillalabs.tesla.stateful.handler :as handler]
             [ring.middleware.defaults :as ring-defaults]
-            [de.otto.tesla.stateful.configuring :as config]))
+            [gorillalabs.tesla.stateful.configuring :as config]))
 
 ;; http response for a healthy system
 (def healthy-response {:status  200
