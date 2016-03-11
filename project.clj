@@ -1,10 +1,10 @@
-(defproject de.otto/tesla-microservice "0.2.1-SNAPSHOT"
+(defproject gorillalabs/tesla "0.3.0-SNAPSHOT"
             :description "basic microservice."
             :url "https://github.com/otto-de/tesla-microservice"
             :license {:name "Apache License 2.0"
                       :url  "http://www.apache.org/license/LICENSE-2.0.html"}
             :scm {:name "git"
-                  :url  "https://github.com/otto-de/tesla-microservice"}
+                  :url  "https://github.com/gorillalabs/tesla"}
             :dependencies [[org.clojure/clojure "1.6.0"]
                            [com.stuartsierra/component "0.2.3"]
                            [gorillalabs/config "1.0.0"]
