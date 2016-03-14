@@ -2,8 +2,8 @@
   (:require [clojure.test :refer :all]
             [gorillalabs.tesla.stateful.metering :as metering]
             [gorillalabs.tesla.util.test-utils :as u]
-            [gorillalabs.tesla.system :as system]
-            [gorillalabs.tesla.stateful.configuring :as configuring]))
+            [gorillalabs.tesla.tesla :as system]
+            [gorillalabs.tesla.stateful.configuration :as configuring]))
 
 
 (deftest ^:unit should-return-prefix-for-testhost

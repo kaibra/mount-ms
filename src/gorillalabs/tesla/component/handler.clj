@@ -1,4 +1,4 @@
-(ns gorillalabs.tesla.tesla.stateful.handler
+(ns gorillalabs.tesla.component.handler
   (:require [com.stuartsierra.component :as component]
             [clojure.tools.logging :as log]
             [compojure.core :as c]))

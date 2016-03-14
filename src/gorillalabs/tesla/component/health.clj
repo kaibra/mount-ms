@@ -1,10 +1,10 @@
-(ns gorillalabs.tesla.tesla.stateful.health
-  (:require [com.stuartsierra.component :as component]
+(ns gorillalabs.tesla.component.health
+  (:require [mount.core :as mnt]
             [compojure.core :as c]
             [clojure.tools.logging :as log]
             [gorillalabs.tesla.stateful.handler :as handler]
             [ring.middleware.defaults :as ring-defaults]
-            [gorillalabs.tesla.stateful.configuring :as config]))
+            [gorillalabs.tesla.stateful.configuration :as config]))
 
 ;; http response for a healthy system
 (def healthy-response {:status  200
@@ -15,7 +15,7 @@
                          :headers {"Content-Type" "text/plain"}
                          :body    "UNHEALTHY"})
 
-(defn health-response [self]
+(defn- health-response [self]
   (if @(:locked self)
     unhealthy-response
     healthy-response))
@@ -34,21 +34,26 @@
                                                          :static false
                                                          :proxy true)))))))
 
-(defn lock-application [self]
+(defn lock [health]
   (reset! (:locked self) true))
 
-(defrecord Health [config handler]
-  component/Lifecycle
-  (start [self]
-    (log/info "-> Starting healthcheck.")
-    (let [new-self (assoc self :locked (atom false))]
-      (handler/register-handler handler (make-handler new-self)) ;; TODO: use config directly
-      new-self))
+(defn unlock [health]
+  (reset! (:locked self) false))
 
-  (stop [self]
-    (log/info "<- Stopping Healthcheck")
-    self))
 
-(defn new-health []
-  (map->Health {}))
+(defn- start []
+  (log/info "-> Starting healthcheck.")
+  (let [new-self (atom false)]
+    (handler/register-handler handler (make-handler new-self))
+    new-self))
+
+(defn- stop [self]
+  (log/info "<- Stopping Healthcheck")
+  self)
+
+(mnt/defstate health
+              :start (start)
+              :stop (stop health))
+
+
 
