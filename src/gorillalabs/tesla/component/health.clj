@@ -1,11 +1,16 @@
 (ns gorillalabs.tesla.component.health
   (:require [mount.core :as mnt]
-            [compojure.core :as c]
+            [bidi.bidi :as bidi]
             [clojure.tools.logging :as log]
-            [gorillalabs.tesla.stateful.handler :as handler]
+            [gorillalabs.tesla.component.configuration :as config]
+            [gorillalabs.tesla.component.handler :as handler]
             [ring.middleware.defaults :as ring-defaults]
-            [gorillalabs.tesla.stateful.configuration :as config]))
+            ))
 
+
+(declare health)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; http response for a healthy system
 (def healthy-response {:status  200
                        :headers {"Content-Type" "text/plain"}
@@ -15,45 +20,46 @@
                          :headers {"Content-Type" "text/plain"}
                          :body    "UNHEALTHY"})
 
-(defn- health-response [self]
-  (if @(:locked self)
-    unhealthy-response
-    healthy-response))
-
-(defn make-handler
-  [self]
-  (let [health-path (config/config (:config self) [:health :path] "/health")]
-    (c/routes (c/GET health-path
-                     []
-                (-> (c/GET health-path
-                           []
-                      (health-response self))
-                    (ring-defaults/wrap-defaults
-                      (assoc ring-defaults/site-defaults :session false
-                                                         :cookies false
-                                                         :static false
-                                                         :proxy true)))))))
-
-(defn lock [health]
-  (reset! (:locked self) true))
-
-(defn unlock [health]
-  (reset! (:locked self) false))
+(defn- health-response [healthy?]
+  (if @healthy?
+    healthy-response
+    unhealthy-response))
 
 
+
+(defn handle [request]
+  (health-response health))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn- start []
   (log/info "-> Starting healthcheck.")
-  (let [new-self (atom false)]
-    (handler/register-handler handler (make-handler new-self))
-    new-self))
+  (let [healthy? (atom true)]
+    (handler/register
+        handler/handler
+        (config/config config/configuration [:health :path] "/health")
+        (handler/wrap-site #'handle))
+    healthy?))
 
 (defn- stop [self]
   (log/info "<- Stopping Healthcheck")
+  (handler/deregister
+    handler/handler
+    (config/config config/configuration [:health :path] "/health"))
   self)
 
 (mnt/defstate health
               :start (start)
               :stop (stop health))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defn lock [health]
+  (reset! health true))
+
+(defn unlock [health]
+  (reset! health false))
+
+
 
 
 

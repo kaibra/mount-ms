@@ -1,13 +1,12 @@
 (ns gorillalabs.tesla.component.appstate
   (:require [mount.core :as mnt]
             [de.otto.status :as s]
-            [compojure.core :as c]
             [clojure.data.json :as json :only [write-str]]
             [clojure.tools.logging :as log]
             [clojure.string :as str]
             [clj-time.local :as local-time]
             [metrics.timers :as timers]
-            [gorillalabs.tesla.stateful.configuration :as config]))
+            [gorillalabs.tesla.component.configuration :as config]))
 
 (defmulti aggregation-strategy
           "Selects the status aggregation strategy based upon config."
@@ -84,7 +83,7 @@
 (defn- response-body [self config]
   (-> (current-state self config)
       (update-in [:application :statusDetails] to-json)
-      (update-in [:application :status] keyword-to-status)))
+      (update-in [:application :status] keyword-to-state)))
 
 
 (defn- response [self config]

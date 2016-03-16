@@ -1,4 +1,4 @@
-(ns gorillalabs.tesla.system-test
+(ns gorillalabs.tesla.tesla-test
   (:require [clojure.test :refer :all]
             [mount.core :as mnt]
             [gorillalabs.tesla.util.test-utils :as u]

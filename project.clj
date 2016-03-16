@@ -13,13 +13,18 @@
                  [environ "1.0.2"]
                  [clj-time "0.11.0"]
 
-                 [de.otto/status "0.1.0"]
+                  ;; HttpKit
+                 [http-kit "2.1.19"]
 
                  ;; io
                  [ring/ring-core "1.4.0"]
                  [ring/ring-defaults "0.1.5"]
+                 [bidi "2.0.1"]
 
-                 [compojure "1.4.0"]
+                 ;; status
+                 [de.otto/status "0.1.0"]
+
+
                  [metrics-clojure "2.6.1"]
                  [metrics-clojure-graphite "2.6.1"]
 

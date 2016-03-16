@@ -1,25 +1,59 @@
 (ns gorillalabs.tesla.component.handler
-  (:require [com.stuartsierra.component :as component]
+  (:require [mount.core :as mnt]
             [clojure.tools.logging :as log]
-            [compojure.core :as c]))
+            [ring.middleware.defaults :as ring-defaults]))
 
-(defprotocol HandlerContainer
-  (register-handler [self routes])
-  (handler [self]))
 
-(defrecord Handler []
-  component/Lifecycle
-  (start [self]
-    (log/info "-> starting Handler")
-    (assoc self :the-handlers (atom [])))
-  (stop [self]
-    (log/info "<- stopping Handler")
-    self)
-  HandlerContainer
-  (register-handler [self handler] (swap! (:the-handlers self) #(conj % handler)))
-  (handler [self]
-    (let [handlers (:the-handlers self)]
-      (apply c/routes @handlers))))
+(defmulti process (fn [handler _] handler))
 
-(defn new-handler []
-  (map->Handler {}))
+(defn register [handler-component uri handler]
+  (swap! handler-component conj uri handler))
+
+(defn- remove-route*
+  [[route handler & routes] uri]
+  (when route
+    (if (= route uri)
+      (recur routes uri)
+      (conj (remove-route* routes uri) handler route))))
+
+(defn remove-route
+  [routes uri]
+  (vec (remove-route* routes uri)))
+
+(defn deregister [handler-component uri]
+  (swap! handler-component remove-route uri)
+  )
+
+(defn- start []
+  (log/info "-> starting handler")
+  (atom []))
+
+(defn- stop []
+  (log/info "<- stopping handler")
+  )
+
+(mnt/defstate handler
+              :start (start)
+              :stop (stop))
+
+(defn wrap-api [handler]
+  (ring-defaults/wrap-defaults
+    handler
+    (assoc ring-defaults/secure-api-defaults
+      :static false
+      :proxy true)))
+
+
+(defn wrap-site [handler]
+  (ring-defaults/wrap-defaults
+    handler
+    (-> ring-defaults/secure-site-defaults
+        (assoc
+          :session false
+          :cookies false
+          :static false
+          :proxy true)
+        (assoc-in [:security :hsts] false)
+        (assoc-in [:security :ssl-redirect] false)
+        )))
+
