@@ -12,8 +12,9 @@
                  [beckon "0.1.1"]
                  [environ "1.0.2"]
                  [clj-time "0.11.0"]
+                 [org.clojure/tools.logging "0.3.1"]
 
-                  ;; HttpKit
+                 ;; HttpKit
                  [http-kit "2.1.19"]
 
                  ;; io
@@ -24,13 +25,21 @@
                  ;; status
                  [de.otto/status "0.1.0"]
 
-
+                 ;; metrics
                  [metrics-clojure "2.6.1"]
                  [metrics-clojure-graphite "2.6.1"]
 
-                 [org.clojure/tools.logging "0.3.1"]]
+                 ;; quartzite
+                 [clojurewerkz/quartzite "2.0.0"]
 
-;;  :filespecs [{:type :paths :paths ["test-utils"]}]
+                 ;; mongo
+                 [com.novemberain/monger "3.0.2"]
+
+
+
+                 ]
+
+  ;;  :filespecs [{:type :paths :paths ["test-utils"]}]
 
   :exclusions [org.clojure/clojure
                org.slf4j/slf4j-nop

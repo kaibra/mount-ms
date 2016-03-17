@@ -11,6 +11,8 @@
     [gorillalabs.tesla.component.health :as health]
     [gorillalabs.tesla.component.handler :as handler]
     [gorillalabs.tesla.component.httpkit :as httpkit]
+    [gorillalabs.tesla.component.quartzite :as quartzite]
+    [gorillalabs.tesla.component.mongo :as mongo]
     ))
 
 (defn wait! [conf]
@@ -29,6 +31,8 @@
        :metering   #'metering/metering
        :handler    #'handler/handler
        :httpkit    #'httpkit/httpkit
+       :quartzite  #'quartzite/quartzite
+       :mongo      #'mongo/mongo
        }]
 
   (defn default-components
