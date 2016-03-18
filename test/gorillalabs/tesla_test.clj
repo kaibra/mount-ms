@@ -1,8 +1,7 @@
 (ns gorillalabs.tesla.tesla-test
   (:require [clojure.test :refer :all]
             [mount.core :as mnt]
-            [gorillalabs.tesla.util.test-utils :as u]
-            [gorillalabs.tesla.tesla :as system]))
+            [gorillalabs.tesla :as system]))
 
 
 (deftest ^:unit should-start-base-system-and-shut-it-down

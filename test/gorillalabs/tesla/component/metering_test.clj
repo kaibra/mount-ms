@@ -1,23 +1,14 @@
 (ns gorillalabs.tesla.stateful.metering-test
   (:require [clojure.test :refer :all]
-            [gorillalabs.tesla.stateful.metering :as metering]
+            [gorillalabs.tesla.component.metering :as metering]
             [gorillalabs.tesla.util.test-utils :as u]
-            [gorillalabs.tesla.tesla :as system]
-            [gorillalabs.tesla.stateful.configuration :as configuring]))
+            [gorillalabs.tesla :as system]
+            [gorillalabs.tesla.component.configuration :as configuring]))
 
 
-(deftest ^:unit should-return-prefix-for-testhost
-  (with-redefs-fn {#'configuring/external-hostname (fn [_] "testhost")}
-    #(is (= (metering/prefix {:config {:graphite-prefix "a_random_prefix"}})
-            "a_random_prefix.testhost"))))
 
-(deftest ^:unit the-metrics-lib-accepts-a-vector-for-building-the-name
-  (is (= (metrics.core/metric-name ["some.name.foo.bar"])
-         "some.name.foo.bar"))
-  (is (= (metrics.core/metric-name ["some" "name" "foo" "bar"])
-         "some.name.foo.bar")))
 
-(deftest ^:unit metrics-registry-should-contain-correct-names
+#_(deftest ^:unit metrics-registry-should-contain-correct-names
   (u/with-started [started (dissoc (system/base-system {}) :server)]
                   (let [metering (:metering started)]
                     (metering/timer! metering "some.name.timer.bar")

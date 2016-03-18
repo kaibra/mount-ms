@@ -32,7 +32,8 @@
   (log/info "<- stopping handler")
   )
 
-(mnt/defstate handler
+(mnt/defstate ^{:on-reload :noop}
+              handler
               :start (start)
               :stop (stop))
 

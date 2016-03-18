@@ -1,9 +1,8 @@
 (ns gorillalabs.tesla.stateful.health-test
   (:require [clojure.test :refer :all]
-            [gorillalabs.tesla.stateful.health :as health]
-            [gorillalabs.tesla.util.test-utils :as u]
-            [gorillalabs.tesla.tesla :as system]
-            [gorillalabs.tesla.stateful.handler :as handler]
+            [gorillalabs.tesla.component.health :as health]
+            [gorillalabs.tesla :as system]
+            [gorillalabs.tesla.component.handler :as handler]
             [ring.mock.request :as mock]))
 
 (defn- serverless-system [runtime-config]

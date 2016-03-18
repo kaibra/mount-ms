@@ -20,7 +20,6 @@
               :start (start)
               :stop (stop mongo))
 
-#_(mg/get-db conn "vulns")
 
 
 

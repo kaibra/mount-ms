@@ -13,11 +13,10 @@
     (com.codahale.metrics MetricFilter)
     (java.util.concurrent TimeUnit)))
 
-(defn prefix [config]
-  (str (:graphite-prefix config) "." (config/external-hostname config)))
-
-(defn start-graphite! [registry config]
-  (let [reporter (graphite/reporter registry
+(defn- start-graphite! [registry config]
+  (let [prefix (fn prefix [config]
+                 (str (:graphite-prefix config) "." (config/external-hostname config)))
+        reporter (graphite/reporter registry
                                     {:host          (:graphite-host config)
                                      :port          (Integer. (:graphite-port config))
                                      :prefix        (prefix config)
@@ -28,7 +27,7 @@
     (graphite/start reporter (Integer/parseInt (:graphite-interval-seconds config)))
     reporter))
 
-(defn start-console! [registry config]
+(defn- start-console! [registry config]
   (let [reporter (console/reporter registry {})]
     (log/info "-> starting console reporter.")
     (console/start reporter (Integer/parseInt (:console-interval-seconds config "10")))
@@ -59,7 +58,8 @@
   self)
 
 ;; Initialises a metrics-registry and a graphite reporter.
-(mnt/defstate metering
+(mnt/defstate ^{:on-reload :noop}
+              metering
               :start (start)
               :stop (stop metering))
 

@@ -92,22 +92,30 @@
                  :headers {"Content-Type" "application/json"}
                  :body    (json/write-str (response-body self config))}))
 
-(defn register-status-fun [appstate fun]
-  (swap! appstate #(conj % fun)))
+(defn- deconj [seq item]
+  (filterv (partial not= item) seq))
+
+
+(defn register-state-fn [appstate state-fn]
+  (swap! appstate conj state-fn))
+
+
+(defn deregister-state-fn [appstate state-fn]
+  (swap! appstate deconj state-fn))
 
 #_(defn make-handler
     [self]
     (let [status-path (config/config (:config self) [:status :path] "/status")]
       (c/routes (c/GET status-path
                        []
-                  (-> (c/GET status-path
-                             []
-                        (status-response self))
-                      (ring-defaults/wrap-defaults
-                        (assoc ring-defaults/site-defaults :session false
-                                                           :cookies false
-                                                           :static false
-                                                           :proxy true)))))))
+                       (-> (c/GET status-path
+                                  []
+                                  (status-response self))
+                           (ring-defaults/wrap-defaults
+                             (assoc ring-defaults/site-defaults :session false
+                                                                :cookies false
+                                                                :static false
+                                                                :proxy true)))))))
 
 
 (defn- start []
@@ -115,4 +123,7 @@
   (atom []))
 
 
-(mnt/defstate appstate :start (start))
+(mnt/defstate ^{:on-reload :noop}
+              appstate
+              :start (start)
+              )

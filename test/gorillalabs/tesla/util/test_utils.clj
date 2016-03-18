@@ -1,6 +1,6 @@
 (ns gorillalabs.tesla.util.test-utils
   (:require [clojure.test :refer :all]
-            [com.stuartsierra.component :as comp]
+            [mount.core :as mnt]
             [ring.mock.request :as mock]))
 
 
