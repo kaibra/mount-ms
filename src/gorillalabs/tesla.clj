@@ -47,7 +47,7 @@
     ;   (health/lock-application (:health system))
     (wait! config/configuration)
     (log/info "<- Stopping system.")
-    (apply mnt/stop (concat (vals default-components) (vlas custom-components))))
+    (apply mnt/stop (concat (vals default-components) (vals custom-components))))
 
   (defn start [custom-components]
     (log/info "-> Starting system")

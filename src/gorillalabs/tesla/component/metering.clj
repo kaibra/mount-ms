@@ -17,22 +17,22 @@
 
 (defmethod start-reporter! :graphite [_ registry config]
   (let [prefix (fn prefix [config]
-                 (str (:graphite-prefix config) "." (config/external-hostname config)))
+                 (str (config/config config [:metering :graphite :prefix]) "." (config/external-hostname config)))
         reporter (graphite/reporter registry
-                                    {:host          (:graphite-host config)
-                                     :port          (int (:graphite-port config 2003))
+                                    {:host          (config/config config [:metering :graphite :host])
+                                     :port          (int (config/config config [:metering :graphite :port] 2003))
                                      :prefix        (prefix config)
                                      :rate-unit     TimeUnit/SECONDS
                                      :duration-unit TimeUnit/MILLISECONDS
                                      :filter        MetricFilter/ALL})]
     (log/info "-> starting graphite reporter.")
-    (graphite/start reporter (int (:graphite-interval-seconds config 10)))
+    (graphite/start reporter (int (config/config config [:metering :graphite :interval-seconds] 10)))
     reporter))
 
 (defmethod start-reporter! :console [_ registry config]
   (let [reporter (console/reporter registry {})]
     (log/info "-> starting console reporter.")
-    (console/start reporter (Integer/parseInt (:console-interval-seconds config "10")))
+    (console/start reporter (int (config/config config [:metering :console :interval-seconds] 10)))
     reporter))
 
 (defn- start-reporters! [registry config]

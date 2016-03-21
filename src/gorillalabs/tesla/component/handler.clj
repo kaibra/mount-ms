@@ -21,21 +21,19 @@
   (vec (remove-route* routes uri)))
 
 (defn deregister [handler-component uri]
-  (swap! handler-component remove-route uri)
-  )
+  (swap! handler-component remove-route uri))
 
 (defn- start []
   (log/info "-> starting handler")
   (atom []))
 
-(defn- stop []
-  (log/info "<- stopping handler")
-  )
+(defn- stop [handler]
+  (log/info (str "<- stopping handler " handler)))
 
 (mnt/defstate ^{:on-reload :noop}
               handler
               :start (start)
-              :stop (stop))
+              :stop (stop handler))
 
 (defn wrap-api [handler]
   (ring-defaults/wrap-defaults
