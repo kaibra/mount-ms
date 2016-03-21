@@ -7,12 +7,19 @@
         :url  "https://github.com/gorillalabs/tesla"}
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [mount "0.1.9"]
-                 [gorillalabs/config "1.0.0"]
+                 [gorillalabs/config "1.0.1-SNAPSHOT"]
                  [org.clojure/data.json "0.2.6"]
                  [beckon "0.1.1"]
                  [environ "1.0.2"]
                  [clj-time "0.11.0"]
+
+                 ;; Logging
                  [org.clojure/tools.logging "0.3.1"]
+                 [org.slf4j/slf4j-api "1.7.19"]
+                 [org.slf4j/log4j-over-slf4j "1.7.19"]
+                 [ch.qos.logback/logback-core "1.1.5"]
+                 [ch.qos.logback/logback-classic "1.1.5"]
+
 
                  ;; HttpKit
                  [http-kit "2.1.19"]
@@ -37,6 +44,7 @@
 
 
 
+
                  ]
 
   ;;  :filespecs [{:type :paths :paths ["test-utils"]}]
@@ -57,9 +65,6 @@
              :meta    {:env {:app-name :tesla-meta}}
              :uberjar {:aot :all}
              :dev     {:dependencies [[javax.servlet/servlet-api "2.5"]
-                                      [org.slf4j/slf4j-api "1.7.16"]
-                                      [ch.qos.logback/logback-core "1.1.5"]
-                                      [ch.qos.logback/logback-classic "1.1.5"]
                                       [ring-mock "0.1.5"]]
                        :plugins      [[lein-ancient "0.6.8"]
                                       [lein-marginalia "0.8.0"]
