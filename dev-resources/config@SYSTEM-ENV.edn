@@ -2,6 +2,13 @@
  :status          {:url "/status"}
  :health          {:url "/health"}
 
+
+ :authorization   {:secret  "mytotallysuperdupermegasecret"
+                   :encryption {:alg :a256kw
+                                :enc :a128gcm}
+                   :authdata {:admin "secret"
+                              :test  "secret"}}
+
  ;;; metering
  :metering        {:reporter "console"
                    :console  {:interval 100}}
