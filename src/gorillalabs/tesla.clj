@@ -8,9 +8,8 @@
     [gorillalabs.tesla.component.configuration :as config]
     [gorillalabs.tesla.component.metering :as metering]
     [gorillalabs.tesla.component.keep-alive :as keep-alive]
-    [gorillalabs.tesla.component.health :as health]
     [gorillalabs.tesla.component.handler :as handler]
-    [gorillalabs.tesla.component.httpkit :as httpkit]
+    [gorillalabs.tesla.component.health :as health]
     [gorillalabs.tesla.component.quartzite :as quartzite]
     [gorillalabs.tesla.component.mongo :as mongo]
     ))
@@ -30,7 +29,6 @@
        :health     #'health/health
        :metering   #'metering/metering
        :handler    #'handler/handler
-       :httpkit    #'httpkit/httpkit
        :quartzite  #'quartzite/quartzite
        :mongo      #'mongo/mongo
        }]
@@ -50,10 +48,9 @@
     (log/info "<- Stopping system.")
     (apply mnt/stop (concat (vals default-components) custom-components)))
 
-
   (defn start [& custom-components]
     (log/info "-> Starting system")
-    (apply mnt/start (concat (vals default-components) custom-components))
+    (apply mnt/start (concat (vals default-components) (vals (into {} custom-components))))
     (doseq [sig ["INT" "TERM"]]
       (reset! (beckon/signal-atom sig)
-              #{(partial apply stop custom-components)}))))
+              #{(partial apply stop (vals (into {} custom-components)))}))))
