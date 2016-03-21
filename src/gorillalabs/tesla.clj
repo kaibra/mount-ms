@@ -30,9 +30,9 @@
        :health     #'health/health
        :metering   #'metering/metering
        :handler    #'handler/handler
-       :httpkit    #'httpkit/httpkit
-       :quartzite  #'quartzite/quartzite
-       :mongo      #'mongo/mongo
+;       :httpkit    #'httpkit/httpkit
+;       :quartzite  #'quartzite/quartzite
+;       :mongo      #'mongo/mongo
        }]
 
   (defn default-components

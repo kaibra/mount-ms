@@ -13,6 +13,7 @@
                  [environ "1.0.2"]
                  [clj-time "0.11.0"]
 
+
                  ;; Logging
                  [org.clojure/tools.logging "0.3.1"]
                  [org.slf4j/slf4j-api "1.7.19"]
@@ -65,6 +66,8 @@
              :meta    {:env {:app-name :tesla-meta}}
              :uberjar {:aot :all}
              :dev     {:dependencies [[javax.servlet/servlet-api "2.5"]
+                                      [org.clojure/tools.namespace "0.2.11"]
+                                      [expectations "2.0.9"]
                                       [ring-mock "0.1.5"]]
                        :plugins      [[lein-ancient "0.6.8"]
                                       [lein-marginalia "0.8.0"]

@@ -13,34 +13,38 @@
     (com.codahale.metrics MetricFilter)
     (java.util.concurrent TimeUnit)))
 
-(defn- start-graphite! [registry config]
+(defmulti start-reporter! (fn [reporter _ _] reporter))
+
+(defmethod start-reporter! :graphite [_ registry config]
   (let [prefix (fn prefix [config]
                  (str (:graphite-prefix config) "." (config/external-hostname config)))
         reporter (graphite/reporter registry
                                     {:host          (:graphite-host config)
-                                     :port          (Integer. (:graphite-port config))
+                                     :port          (int (:graphite-port config 2003))
                                      :prefix        (prefix config)
                                      :rate-unit     TimeUnit/SECONDS
                                      :duration-unit TimeUnit/MILLISECONDS
                                      :filter        MetricFilter/ALL})]
     (log/info "-> starting graphite reporter.")
-    (graphite/start reporter (Integer/parseInt (:graphite-interval-seconds config)))
+    (graphite/start reporter (int (:graphite-interval-seconds config 10)))
     reporter))
 
-(defn- start-console! [registry config]
+(defmethod start-reporter! :console [_ registry config]
   (let [reporter (console/reporter registry {})]
     (log/info "-> starting console reporter.")
     (console/start reporter (Integer/parseInt (:console-interval-seconds config "10")))
     reporter))
 
-(defn- start-reporter! [registry config]
-  (case (:metering-reporter (:config config))
-    "graphite" (start-graphite! registry config)
-    "console" (start-console! registry config)
-    nil                                                     ;; default: do nothing!
-    ))
-
-
+(defn- start-reporters! [registry config]
+  (let [reporter-or-reporters (config/config config [:metering :reporter])
+        reporters (if (or (nil? reporter-or-reporters)      ;; might be nil
+                          (coll? reporter-or-reporters))
+                    reporter-or-reporters
+                    (vector reporter-or-reporters))]
+    (doall (map
+             #(start-reporter! %1 registry config)
+             reporters
+             ))))
 
 
 
@@ -48,14 +52,16 @@
   (log/info "-> starting metering.")
   (let [registry (metrics/new-registry)
         config config/configuration]
-    {:registry registry
-     :reporter (start-reporter! registry config)}))
+    {:registry  registry
+     :reporters (start-reporters! registry config)}))
 
-(defn- stop [self]
+(defn- stop [metering]
   (log/info "<- stopping metering")
-  (when-let [reporter (:reporter self)]
-    (.stop reporter))
-  self)
+  (when-let [reporter (:reporters metering)]
+    (doall (map (fn stop-reporter [r]
+                  (log/info "stopping " r)
+                  (.stop r)) reporter)))
+  metering)
 
 ;; Initialises a metrics-registry and a graphite reporter.
 (mnt/defstate ^{:on-reload :noop}
