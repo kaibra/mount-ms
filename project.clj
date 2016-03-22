@@ -25,6 +25,11 @@
                  ;; HttpKit
                  [http-kit "2.1.19"]
 
+                 ;; Authentication
+                 [ring/ring-json "0.4.0"]
+                 [buddy "0.10.0"]
+
+
                  ;; io
                  [ring/ring-core "1.4.0"]
                  [ring/ring-defaults "0.1.5"]
