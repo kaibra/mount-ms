@@ -1,4 +1,4 @@
-(ns gorillalabs.tesla.stateful.health-test
+(ns gorillalabs.tesla.component.health-test
   (:require [clojure.test :refer :all]
             [gorillalabs.tesla.component.health :as health]
             [gorillalabs.tesla :as system]
