@@ -44,7 +44,7 @@
                :options              (options config)
                :authdata             (authdata config)
                :unauthorized-handler unauthorized}]
-    (assoc state :jwe-backend (auth/jwe-backend state))))
+    (assoc state :backend (auth/jwe-backend state))))
 
 (defn- stop [self]
   (log/info "<- Stopping authorization")

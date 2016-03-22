@@ -85,8 +85,8 @@
 (defn wrap-secure-api [handler authorization]
   (-> handler
       (wrap-block-not-authenticated-requests)
-      (wrap-authentication authorization)
-      (wrap-authorization authorization)
+      (wrap-authentication (:backend authorization))
+      (wrap-authorization (:backend authorization))
       (wrap-common-api-handler)
       ))
 
