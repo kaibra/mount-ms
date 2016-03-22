@@ -27,6 +27,8 @@
 
                  ;; Authentication
                  [ring/ring-json "0.4.0"]
+                 [buddy "0.10.0"]
+
 
                  ;; io
                  [ring/ring-core "1.4.0"]
