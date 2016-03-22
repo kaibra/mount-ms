@@ -36,7 +36,7 @@
 ;; Entry point (after mount)
 
 (defn- load-config []
-  (config/init (str (environ/env :system) "-" (environ/env :env))))
+  (config/init (str (environ/env :env))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
