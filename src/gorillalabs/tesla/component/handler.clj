@@ -38,6 +38,8 @@
 (defn- stop [handler]
   (log/info (str "<- stopping handler " handler)))
 
+
+(declare handler) ;; this is for Cursive IDE to pick up the symbol
 (mnt/defstate ^{:on-reload :noop}
               handler
               :start (start)

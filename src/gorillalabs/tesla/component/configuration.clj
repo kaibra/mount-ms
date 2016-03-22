@@ -44,10 +44,11 @@
 
 
 (defn start-configuring []
-  (log/info "-> start config")
+  (log/info "-> starting config")
   (let [conf (merge (load-config)
                     {:version {:version "test.version" ;; load this from Manifest?
                                :commit  "test.githash"}})]
     conf))
 
+(declare configuration) ;; this is for Cursive IDE to pick up the symbol ;)
 (mnt/defstate configuration :start (start-configuring))

@@ -6,24 +6,35 @@
             [clojure.string :as str]
             [clj-time.local :as local-time]
             [metrics.timers :as timers]
-            [gorillalabs.tesla.component.configuration :as config]))
+            [gorillalabs.tesla.component.configuration :as config]
+            [gorillalabs.tesla.component.handler :as handler]
+            [ring.middleware.defaults :as ring-defaults]))
+
+(declare appstate)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; internal helper functions
+
+(defn- deconj [seq item]
+  (filterv (partial not= item) seq))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; functions to compile an aggregated appstate
+
+
 
 (defmulti aggregation-strategy
           "Selects the status aggregation strategy based upon config."
           (fn [config]
-            (keyword (config/config config [:status-aggregation]))))
+            (keyword (config/config config [:appstate :aggregation]))))
 
 (defmethod aggregation-strategy :forgiving [_]
   s/forgiving-strategy)
 
 (defmethod aggregation-strategy :default [_]
   s/strict-strategy)
-
-
-
-
-
-
 
 
 (defn- keyword-to-state [kw]
@@ -40,16 +51,6 @@
 (defn- sanitize [config checklist]
   (into {}
         (map (partial sanitize-mapentry checklist) config)))
-
-
-(defn- to-json [compiled-state]
-  (into {} (map
-             (fn [[k v]]
-               {k (update-in v [:status] keyword-to-state)})
-             compiled-state)))
-
-
-
 
 
 (defn- system-infos [config]
@@ -73,57 +74,80 @@
       :system (system-infos config))))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; http related stuff
 
-
-
-
-
-
+(defn- to-json [compiled-state]
+  (into {} (map
+             (fn [[k v]]
+               {k (update-in v [:status] keyword-to-state)})
+             compiled-state)))
 
 (defn- response-body [self config]
   (-> (current-state self config)
       (update-in [:application :statusDetails] to-json)
       (update-in [:application :status] keyword-to-state)))
 
-
 (defn- response [self config]
-  (timers/time! (:status-timer self)
-                {:status  200
-                 :headers {"Content-Type" "application/json"}
-                 :body    (json/write-str (response-body self config))}))
+  {:status  200
+   :headers {"Content-Type" "application/json"}
+   :body    (json/write-str (response-body self config))})
 
-(defn- deconj [seq item]
-  (filterv (partial not= item) seq))
-
-
-(defn register-state-fn [appstate state-fn]
-  (swap! appstate conj state-fn))
+(defn- handle [appstate config request]
+  (response appstate config))
 
 
-(defn deregister-state-fn [appstate state-fn]
-  (swap! appstate deconj state-fn))
+(defn- appstate-route [config]
+  (config/config config [:appstate :path] "state"))
 
-#_(defn make-handler
-    [self]
-    (let [status-path (config/config (:config self) [:status :path] "/status")]
-      (c/routes (c/GET status-path
-                       []
-                       (-> (c/GET status-path
-                                  []
-                                  (status-response self))
-                           (ring-defaults/wrap-defaults
-                             (assoc ring-defaults/site-defaults :session false
-                                                                :cookies false
-                                                                :static false
-                                                                :proxy true)))))))
+(defn- create-handler [appstate config]
+  (handler/wrap-site (partial handle appstate config)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; lifecycle functions
+
+(defn- create-appstate []
+  (atom []))
+
 
 
 (defn- start []
-  (log/info "-> start app-status")
-  (atom []))
+  (log/info "-> start appstate")
+  (let [;; the (new) state of this component
+        appstate (create-appstate)
 
+        ;; other components
+        config config/configuration
+        handler handler/handler
+        ]
+    (handler/register
+      handler
+      (appstate-route config)
+      (create-handler appstate config))
+    appstate))
+
+(defn- stop [self]
+  (log/info "<- Stopping appstate")
+  (handler/deregister
+    handler/handler
+    (appstate-route config/configuration))
+  self)
 
 (mnt/defstate ^{:on-reload :noop}
               appstate
               :start (start)
-              )
+              :stop (stop appstate))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; API to this component
+
+(defn register-state-fn [appstate state-fn]
+  (swap! appstate conj state-fn)
+  appstate)
+
+
+(defn deregister-state-fn [appstate state-fn]
+  (swap! appstate deconj state-fn)
+  appstate)

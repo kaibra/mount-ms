@@ -11,6 +11,8 @@
 (declare health)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; http related stuff
+
 ;; http response for a healthy system
 (def healthy-response {:status  200
                        :headers {"Content-Type" "text/plain"}
@@ -27,12 +29,14 @@
 
 
 
-(defn handle [request]
+(defn- handle [request]
   (health-response health))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; lifecycle functions
+
 (defn- start []
-  (log/info "-> Starting healthcheck.")
+  (log/info "-> starting healthcheck.")
   (let [healthy? (atom true)]
     (handler/register
         handler/handler
@@ -41,7 +45,7 @@
     healthy?))
 
 (defn- stop [self]
-  (log/info "<- Stopping Healthcheck")
+  (log/info "<- stopping Healthcheck")
   (handler/deregister
     handler/handler
     (config/config config/configuration [:health :path] "health"))
@@ -52,6 +56,7 @@
               :stop (stop health))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; API to this component
 
 (defn lock [health]
   (reset! health true))
