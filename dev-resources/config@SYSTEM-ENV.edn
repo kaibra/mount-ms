@@ -3,9 +3,9 @@
  :health          {:url "/health"}
 
 
- :authorization   {:secret  "mytotallysuperdupermegasecret"
-                   :encryption {:alg :a256kw
-                                :enc :a128gcm}
+ :authorization   {:secret   "mytotallysuperdupermegasecret"
+                   :options  {:alg :a256kw
+                              :enc :a128gcm}
                    :authdata {:admin "secret"
                               :test  "secret"}}
 

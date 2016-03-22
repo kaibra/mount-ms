@@ -9,35 +9,42 @@
             ))
 
 
-(def secret
-  (delay (let [secret? (config/config config/configuration [:authorization :secret])]
-           (when secret? (hash/sha256 secret?)))))
+(declare authorization)
 
-(def encryption (delay (config/config config/configuration [:authorization :encryption])))
-(def authdata (delay (config/config config/configuration [:authorization :authdata])))
+
+(defn- get-config [key config]
+  (config/config config [:authorization key]))
+
+(defn- secret [config]
+  (let [secret? (config/config config [:authorization :secret])]
+    (when secret? (hash/sha256 secret?))))
+
+(def options
+  (partial get-config :options))
+
+(def authdata
+  (partial get-config :authdata))
 
 (defn- unauthorized [& _] {:status 403 :body {:message "Unauthorized. Please login first."}})
 
 (defn authorize [username password]
-  (let [valid? (some-> (deref authdata)
+  (let [valid? (some-> (:authdata authorization)
                        (get (keyword username))
                        (= password))]
     (when (and username password)
       (if valid?
         (let [claims {:user (keyword username)
                       :exp  (-> 3 hours from-now)}]
-          (jwe/encrypt claims (deref secret) (deref encryption)))))))
-
-
-
+          (jwe/encrypt claims (:secret authorization) (:options authorization)))))))
 
 (defn- start []
   (log/info "-> Starting authorization.")
-  (if (and secret encryption authdata)
-    (auth/jwe-backend {:secret               (deref secret)
-                       :options              (deref encryption)
-                       :unauthorized-handler unauthorized})
-    (log/error "Autorization needs to be configured first")))
+  (let [config config/configuration
+        state {:secret               (secret config)
+               :options              (options config)
+               :authdata             (authdata config)
+               :unauthorized-handler unauthorized}]
+    (assoc state :jwe-backend (auth/jwe-backend state))))
 
 (defn- stop [self]
   (log/info "<- Stopping authorization")
