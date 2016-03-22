@@ -2,7 +2,6 @@
   (:require [mount.core :as mnt]
             [clojure.tools.logging :as log]
             [gorillalabs.tesla.component.configuration :as config]
-            [gorillalabs.tesla.component.mongo :refer [mongo retrievePage retrieveItem]]
             [buddy.sign.jwe :as jwe]
             [clj-time.core :refer [hours from-now]]
             [buddy.auth.backends.token :as auth]
