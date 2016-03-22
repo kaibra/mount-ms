@@ -7,7 +7,7 @@
         :url  "https://github.com/gorillalabs/tesla"}
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [mount "0.1.9"]
-                 [gorillalabs/config "1.0.1-SNAPSHOT"]
+                 [gorillalabs/config "1.0.3"]
                  [org.clojure/data.json "0.2.6"]
                  [beckon "0.1.1"]
                  [environ "1.0.2"]

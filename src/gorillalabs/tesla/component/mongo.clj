@@ -19,7 +19,3 @@
 (mnt/defstate mongo
               :start (start)
               :stop (stop mongo))
-
-
-
-

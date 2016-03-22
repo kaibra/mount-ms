@@ -41,17 +41,17 @@
      (default-components key)))
 
 
-  (defn stop [custom-components]
+  (defn stop []
     (beckon/reinit-all!)
     (log/info "<- System will be stopped. Setting lock.")
     ;   (health/lock-application (:health system))
     (wait! config/configuration)
     (log/info "<- Stopping system.")
-    (apply mnt/stop (concat (vals default-components) (vals custom-components))))
+    (mnt/stop))
 
   (defn start [custom-components]
     (log/info "-> Starting system")
     (apply mnt/start (concat (vals default-components) (vals custom-components)))
     (doseq [sig ["INT" "TERM"]]
       (reset! (beckon/signal-atom sig)
-              #{(partial apply stop (vals (into {} custom-components)))}))))
+              #{(stop)}))))
