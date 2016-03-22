@@ -7,25 +7,29 @@
 (defmulti process (fn [handler _] handler))
 
 (defn register [handler-component uri handler]
-  (swap! handler-component conj uri handler))
+  (swap! handler-component assoc uri handler))
 
-(defn- remove-route*
+#_(defn- remove-route*
   [[route handler & routes] uri]
   (when route
     (if (= route uri)
       (recur routes uri)
       (conj (remove-route* routes uri) handler route))))
 
-(defn remove-route
+#_(defn remove-route
   [routes uri]
   (vec (remove-route* routes uri)))
+
+(defn remove-route
+    [routes uri]
+    (dissoc routes uri))
 
 (defn deregister [handler-component uri]
   (swap! handler-component remove-route uri))
 
 (defn- start []
   (log/info "-> starting handler")
-  (atom []))
+  (atom {}))
 
 (defn- stop [handler]
   (log/info (str "<- stopping handler " handler)))
