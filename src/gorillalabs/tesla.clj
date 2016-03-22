@@ -29,9 +29,9 @@
        :health     #'health/health
        :metering   #'metering/metering
        :handler    #'handler/handler
-;       :httpkit    #'httpkit/httpkit
-;       :quartzite  #'quartzite/quartzite
-;       :mongo      #'mongo/mongo
+       ;       :httpkit    #'httpkit/httpkit
+       ;       :quartzite  #'quartzite/quartzite
+       ;       :mongo      #'mongo/mongo
        }]
 
   (defn default-components
@@ -54,4 +54,4 @@
     (apply mnt/start (concat (vals default-components) (vals custom-components)))
     (doseq [sig ["INT" "TERM"]]
       (reset! (beckon/signal-atom sig)
-              #{(stop)}))))
+              #{stop}))))

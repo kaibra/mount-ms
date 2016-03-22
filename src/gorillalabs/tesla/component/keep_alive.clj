@@ -35,7 +35,7 @@
     {:running? running?
      :thread   (start-keep-alive-thread running?)}))
 
-
+(declare keep-alive)
 (mnt/defstate keep-alive
               :start (start)
               :stop (stop keep-alive))

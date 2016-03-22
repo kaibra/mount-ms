@@ -2,6 +2,8 @@
   (:require [clojurewerkz.quartzite.scheduler :as qs]
             [mount.core :as mnt]))
 
+(declare quartzite) ;; this is for Cursive IDE to pick up the symbol ;)
+
 (mnt/defstate quartzite
               :start (-> (qs/initialize) qs/start)
               :stop (qs/shutdown quartzite))

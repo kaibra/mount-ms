@@ -16,6 +16,7 @@
   (mg/disconnect mongo)
   )
 
+(declare mongo) ;; this is for Cursive IDE to pick up the symbol ;)
 (mnt/defstate mongo
               :start (start)
               :stop (stop mongo))
