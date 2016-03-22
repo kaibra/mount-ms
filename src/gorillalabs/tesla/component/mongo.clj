@@ -19,3 +19,6 @@
 (mnt/defstate mongo
               :start (start)
               :stop (stop mongo))
+
+(defn getDatabase [name]
+      (mg/get-db mongo name))
