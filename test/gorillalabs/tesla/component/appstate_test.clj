@@ -1,15 +1,8 @@
 (ns gorillalabs.tesla.component.appstate-test
   (:require [clojure.test :refer :all]
-            [gorillalabs.tesla.component.appstate :as app-status]
-            [environ.core :as env]
             [clojure.data.json :as json]
-            [clojure.tools.logging :as log]
-            [gorillalabs.tesla.util.test-utils :as u]
-            [gorillalabs.tesla.component.handler :as handler]
             [ring.mock.request :as mock]
             [de.otto.status :as s]
-            [mount.core :as mnt]
-            [gorillalabs.tesla :as tesla]
             [gorillalabs.tesla.component.appstate :as appstate]))
 
 
