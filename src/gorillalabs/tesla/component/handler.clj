@@ -1,7 +1,11 @@
 (ns gorillalabs.tesla.component.handler
   (:require [mount.core :as mnt]
             [clojure.tools.logging :as log]
-            [ring.middleware.defaults :as ring-defaults]))
+            [ring.middleware.defaults :as ring-defaults]
+            [ring.middleware.json :refer [wrap-json-response wrap-json-params wrap-json-body]]
+            [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
+            [buddy.auth :refer [authenticated? throw-unauthorized]]
+            ))
 
 
 (defmulti process (fn [handler _] handler))
@@ -39,12 +43,35 @@
               :start (start)
               :stop (stop handler))
 
-(defn wrap-api [handler]
-  (ring-defaults/wrap-defaults
-    handler
-    (assoc ring-defaults/secure-api-defaults
-      :static false
-      :proxy true)))
+(defn- wrap-block-not-authenticated-requests
+  [handler]
+  (fn [request]
+    (if-not (authenticated? request)
+      (throw-unauthorized)
+      (handler request))))
+
+(defn- wrap-common-handler
+  [handler]
+  (-> handler
+      (ring-defaults/wrap-defaults ring-defaults/site-defaults)
+      (wrap-json-body)
+      (wrap-json-params)
+      (wrap-json-response)
+      ))
+
+(defn wrap-secure-api [handler authorization]
+  (-> handler
+      (wrap-block-not-authenticated-requests)
+      (wrap-authentication authorization)
+      (wrap-authorization authorization)
+      (wrap-common-handler)
+      ))
+
+
+(defn wrap-insecure-api [handler]
+  (-> handler
+      (wrap-common-handler)
+))
 
 
 (defn wrap-site [handler]
