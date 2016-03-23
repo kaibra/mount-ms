@@ -48,9 +48,6 @@
                  ;; mongo
                  [com.novemberain/monger "3.0.2"]
 
-
-
-
                  ]
 
   ;;  :filespecs [{:type :paths :paths ["test-utils"]}]
@@ -65,11 +62,7 @@
                    :integration :integration
                    :unit        :unit
                    :all         (constantly true)}
-  :profiles {:test    {:env {:metering-reporter "console"
-                             :server-port       "9991"
-                             :cache-dir         "/tmp"}}
-             :meta    {:env {:app-name :tesla-meta}}
-             :uberjar {:aot :all}
+  :profiles {:uberjar {:aot :all}
              :dev     {:dependencies [[javax.servlet/servlet-api "2.5"]
                                       [org.clojure/tools.namespace "0.2.11"]
                                       [expectations "2.0.9"]

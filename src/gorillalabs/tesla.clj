@@ -6,7 +6,7 @@
     [environ.core :as env :only [env]]
     [gorillalabs.tesla.component.appstate :as appstate]
     [gorillalabs.tesla.component.configuration :as config]
-    [gorillalabs.tesla.component.metering :as metering]
+    [gorillalabs.tesla.component.metrics :as metrics]
     [gorillalabs.tesla.component.keep-alive :as keep-alive]
     [gorillalabs.tesla.component.handler :as handler]
     [gorillalabs.tesla.component.health :as health]
@@ -27,7 +27,7 @@
        :keep-alive #'keep-alive/keep-alive
        :app-status #'appstate/appstate
        :health     #'health/health
-       :metering   #'metering/metering
+       :metrics    #'metrics/metrics
        :handler    #'handler/handler
        ;       :httpkit    #'httpkit/httpkit
        ;       :quartzite  #'quartzite/quartzite

@@ -1,10 +1,11 @@
-(ns gorillalabs.tesla.component.metering
+(ns gorillalabs.tesla.component.metrics
   (:require
     [mount.core :as mnt]
     [metrics.core :as metrics]
     [metrics.timers :as timers]
     [metrics.counters :as counters]
     [metrics.gauges :as gauges]
+    [metrics.meters :as meters]
     [metrics.reporters.graphite :as graphite]
     [metrics.reporters.console :as console]
     [clojure.tools.logging :as log]
@@ -17,26 +18,26 @@
 
 (defmethod start-reporter! :graphite [_ registry config]
   (let [prefix (fn prefix [config]
-                 (str (config/config config [:metering :graphite :prefix]) "." (config/external-hostname config)))
+                 (str (config/config config [:metrics :graphite :prefix]) "." (config/external-hostname config)))
         reporter (graphite/reporter registry
-                                    {:host          (config/config config [:metering :graphite :host])
-                                     :port          (int (config/config config [:metering :graphite :port] 2003))
+                                    {:host          (config/config config [:metrics :graphite :host])
+                                     :port          (int (config/config config [:metrics :graphite :port] 2003))
                                      :prefix        (prefix config)
                                      :rate-unit     TimeUnit/SECONDS
                                      :duration-unit TimeUnit/MILLISECONDS
                                      :filter        MetricFilter/ALL})]
     (log/info "-> starting graphite reporter.")
-    (graphite/start reporter (int (config/config config [:metering :graphite :interval-seconds] 10)))
+    (graphite/start reporter (int (config/config config [:metrics :graphite :interval-seconds] 10)))
     reporter))
 
 (defmethod start-reporter! :console [_ registry config]
   (let [reporter (console/reporter registry {})]
     (log/info "-> starting console reporter.")
-    (console/start reporter (int (config/config config [:metering :console :interval-seconds] 10)))
+    (console/start reporter (int (config/config config [:metrics :console :interval-seconds] 10)))
     reporter))
 
 (defn- start-reporters! [registry config]
-  (let [reporter-or-reporters (config/config config [:metering :reporter])
+  (let [reporter-or-reporters (config/config config [:metrics :reporter])
         reporters (if (or (nil? reporter-or-reporters)      ;; might be nil
                           (coll? reporter-or-reporters))
                     reporter-or-reporters
@@ -49,31 +50,34 @@
 
 
 (defn- start []
-  (log/info "-> starting metering.")
+  (log/info "-> starting metrics.")
   (let [registry (metrics/new-registry)
         config config/configuration]
     {:registry  registry
      :reporters (start-reporters! registry config)}))
 
-(defn- stop [metering]
-  (log/info "<- stopping metering")
-  (when-let [reporter (:reporters metering)]
+(defn- stop [metrics]
+  (log/info "<- stopping metrics")
+  (when-let [reporter (:reporters metrics)]
     (doall (map (fn stop-reporter [r]
                   (log/info "stopping " r)
                   (.stop r)) reporter)))
-  metering)
+  metrics)
 
-;; Initialises a metrics-registry and a graphite reporter.
+(declare metrics)
 (mnt/defstate ^{:on-reload :noop}
-              metering
+              metrics
               :start (start)
-              :stop (stop metering))
+              :stop (stop metrics))
 
 (defn gauge! [name gauge-callback-fn]
-  (gauges/gauge-fn (:registry metering) [name] gauge-callback-fn))
+  (gauges/gauge-fn (:registry metrics) [name] gauge-callback-fn))
 
 (defn timer! [name]
-  (timers/timer (:registry metering) [name]))
+  (timers/timer (:registry metrics) [name]))
 
 (defn counter! [name]
-  (counters/counter (:registry metering) [name]))
+  (counters/counter (:registry metrics) [name]))
+
+(defn meter! [name]
+  (meters/meter (:registry metrics) name))
