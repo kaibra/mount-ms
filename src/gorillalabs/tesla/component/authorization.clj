@@ -11,6 +11,13 @@
 
 (declare authorization)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; http related stuff
+
+(defn- unauthorized [& _] {:status 403 :body {:message "Unauthorized. Please login first."}})
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; internal helper functions
 
 (defn- get-config [key config]
   (config/config config [:authorization key]))
@@ -25,7 +32,14 @@
 (def authdata
   (partial get-config :authdata))
 
-(defn- unauthorized [& _] {:status 403 :body {:message "Unauthorized. Please login first."}})
+(defn- get-state [config]
+  {:secret               (secret config)
+   :options              (options config)
+   :authdata             (authdata config)
+   :unauthorized-handler unauthorized})
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; API to this component
 
 (defn authorize [username password]
   (let [valid? (some-> (:authdata authorization)
@@ -37,14 +51,19 @@
                       :exp  (-> 3 hours from-now)}]
           (jwe/encrypt claims (:secret authorization) (:options authorization)))))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; lifecycle functions
+
+(defn- create-authorization []
+  (let [config config/configuration
+        state (get-state config)]
+    (println (str "config " config))
+    (println (str "state " state))
+    (assoc state :backend (auth/jwe-backend state))))
+
 (defn- start []
   (log/info "-> Starting authorization.")
-  (let [config config/configuration
-        state {:secret               (secret config)
-               :options              (options config)
-               :authdata             (authdata config)
-               :unauthorized-handler unauthorized}]
-    (assoc state :backend (auth/jwe-backend state))))
+  (create-authorization))
 
 (defn- stop [self]
   (log/info "<- Stopping authorization")
