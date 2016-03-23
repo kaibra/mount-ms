@@ -3,6 +3,7 @@
             [clojure.tools.logging :as log]
             [ring.middleware.defaults :as ring-defaults]
             [ring.middleware.json :refer [wrap-json-response wrap-json-params wrap-json-body]]
+            [ring.util.response :refer [content-type]]
             [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             ))
@@ -39,11 +40,29 @@
   (log/info (str "<- stopping handler " handler)))
 
 
-(declare handler) ;; this is for Cursive IDE to pick up the symbol
+(declare handler)                                           ;; this is for Cursive IDE to pick up the symbol
 (mnt/defstate ^{:on-reload :noop}
               handler
               :start (start)
               :stop (stop handler))
+
+(defn- exception_caugth [& _] {:status 500 :body {:message "Internal error"}})
+
+(defn- wrap-exception-handling
+  "handles all not yet caught exceptions"
+  [handler]
+  (fn [request]
+    (try
+      (handler request)
+      (catch Exception e
+        (do (log/error (str "caught exception: " (.getMessage e)))
+            (exception_caugth))))))
+
+(defn- wrap-enforce-json-content-type
+  "sets the content type to application/json, regardless to any existing value"
+  [handler]
+  (fn [request]
+    (content-type (handler request) "application/json")))
 
 (defn- wrap-block-not-authenticated-requests
   [handler]
@@ -52,9 +71,11 @@
       (throw-unauthorized)
       (handler request))))
 
-(defn- wrap-common-handler
+(defn- wrap-common-api-handler
   [handler]
   (-> handler
+      (wrap-exception-handling)
+      (wrap-enforce-json-content-type)
       (ring-defaults/wrap-defaults ring-defaults/site-defaults)
       (wrap-json-body)
       (wrap-json-params)
@@ -64,16 +85,16 @@
 (defn wrap-secure-api [handler authorization]
   (-> handler
       (wrap-block-not-authenticated-requests)
-      (wrap-authentication authorization)
-      (wrap-authorization authorization)
-      (wrap-common-handler)
+      (wrap-authentication (:backend authorization))
+      (wrap-authorization (:backend authorization))
+      (wrap-common-api-handler)
       ))
 
 
 (defn wrap-insecure-api [handler]
   (-> handler
-      (wrap-common-handler)
-))
+      (wrap-common-api-handler)
+      ))
 
 
 (defn wrap-site [handler]
