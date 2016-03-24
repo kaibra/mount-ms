@@ -40,7 +40,7 @@
   (let [healthy? (atom true)]
     (handler/register
         handler/handler
-        (config/config config/configuration [:health :path] "health")
+        (config/config config/configuration [:health :path] "/health")
         (handler/wrap-site #'handle))
     healthy?))
 
@@ -48,7 +48,7 @@
   (log/info "<- stopping Healthcheck")
   (handler/deregister
     handler/handler
-    (config/config config/configuration [:health :path] "health"))
+    (config/config config/configuration [:health :path] "/health"))
   self)
 
 (mnt/defstate health

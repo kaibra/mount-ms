@@ -31,8 +31,8 @@
 (defn- start []
   (log/info "-> starting httpkit")
   (let [server-config (server-config config/configuration)
-        routes ["/" @handler/handler]
-        _ (log/info "Starting httpkit with port " (server-config :port) " and bind " (server-config :ip) ".")
+        routes ["" @handler/handler]
+        _ (log/info "Starting httpkit with port " (server-config :port) " and bind " (server-config :ip) ":" routes)
         server (httpkit/run-server (bidi.ring/make-handler routes) server-config)]
     server))
 

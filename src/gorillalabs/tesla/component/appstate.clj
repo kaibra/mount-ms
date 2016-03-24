@@ -98,7 +98,7 @@
 
 
 (defn- appstate-route [config]
-  (config/config config [:appstate :path] "state"))
+  (config/config config [:appstate :path] "/state"))
 
 (defn- create-handler [appstate config]
   (handler/wrap-site (partial handle appstate config)))
