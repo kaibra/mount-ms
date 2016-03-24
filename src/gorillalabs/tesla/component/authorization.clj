@@ -57,8 +57,6 @@
 (defn- create-authorization []
   (let [config config/configuration
         state (get-state config)]
-    (println (str "config " config))
-    (println (str "state " state))
     (assoc state :backend (auth/jwe-backend state))))
 
 (defn- start []
