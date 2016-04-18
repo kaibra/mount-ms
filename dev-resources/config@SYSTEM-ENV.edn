@@ -6,8 +6,12 @@
  :authorization   {:secret   "mytotallysuperdupermegasecret"
                    :options  {:alg :a256kw
                               :enc :a128gcm}
-                   :authdata {:admin "secret"
-                              :test  "secret"}}
+                   :authdata {:admin {:roles    [:admin_role]
+                                      :password "secret"}
+                              :test  {:roles    [:user_role]
+                                      :password "secret"}
+                              }
+                   }
 
  ;;; metrics
  :metrics         {:reporter "console"
