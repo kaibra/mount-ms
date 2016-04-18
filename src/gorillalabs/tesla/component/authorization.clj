@@ -43,7 +43,7 @@
 
 (defn authorize [username password]
   (let [valid? (some-> (:authdata authorization)
-                       (get (keyword username))
+                       (get-in [(keyword username) :password])
                        (= password))]
     (when (and username password)
       (if valid?
