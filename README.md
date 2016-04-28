@@ -1,11 +1,19 @@
 #tesla
 
-This is the common basis to build microservices in Clojure. It is built upon [Mount](https://github.com/tolitius/mount) to support stateful components in a
+Tesla is a set of components to build microservices in Clojure.
+It is built upon [Mount](https://github.com/tolitius/mount) to support stateful components in a
 very clojuresque way.
 
-Tesla is coming with some helpful components, like a health-check, a monitoring component, http handling and serving. You might alter your configuration to add
- your own components and even replace ours.
 
+These are the (stateful) components defined by Tesla:
+
+  * a metrics reporter to gather and distribute metrics
+  * a handler component to manage your http handlers and register them to your http server.
+  * an http server (actually, it's httpkit with a minimal wrapper)
+  * a state to aggregate component state to an appstate, so we can get a view into the state of our application as a whole. Register your components to use this.
+  * a health check you can set to UNHEALTHY from your code (will be set if Tesla is shutting down). This will give your loadbalancers a signal to take a certain instance off the balancing.
+  * a scheduling component based upon Quarzite.
+  * a Shutdown mechanism. If necessary delayed, so load-balancers have time to notice.
 
 Tesla is a fork of [Tesla Microservices by Otto.de](https://github.com/otto-de/tesla-microservice), or to be more precise one of [Kai Brandes' fork](https://github.com/kaibra/mount-ms).
 
@@ -17,32 +25,20 @@ Tesla is a fork of [Tesla Microservices by Otto.de](https://github.com/otto-de/t
 
 _tesla_ is used for a number of different services now. Still it is a work in progress. See [CHANGES.md](./CHANGES.md) for instructions on breaking changes.
 
--```clj
--(ns kaibra.ms-example
--  (:require
--    [kaibra.system :as mount-ms]
--    [clojure.tools.logging :as log]
--    [kaibra.stateful.server :as server])
--  (:gen-class))
-+_tesla_ is used for a number of different services now. Still it is a work in progress. See [CHANGES.md](./CHANGES.md) for instructions on breaking changes.
- 
--(defn -main [& args]
--  (log/info "Starting MS-EXAMPLE")
--  (mount-ms/start-with-states
--    #'server/server ;see ms-httpkit
--    ;put your custom states you want to start with the mount-ms states here
--    ))
+```clj
+    (ns gorillalabs.ms-example
+      (:require [gorillalabs.tesla :as tesla]
+                [clojure.tools.logging :as log]
+                [gorillalabs.tesla.component.httpkit :as server])
+  (:gen-class))
 
-
-## Features included
-
-* Load configuration from filesystem.
-* Aggregate a status.
-* Reply to a health check.
-* Deliver a json status report.
-* Report to graphite using the metrics library.
-* Manage handlers using ring.
-* Shutdown gracefully. If necessary delayed, so load-balancers have time to notice.
+(defn -main [& args]
+  (log/info "Starting MS-EXAMPLE")
+  (tesla/start
+    {:http-server #'server/server}
+    ;put your custom states you want to start with the default states here
+    ))
+```
 
 ## Examples (for Ottos tesla-microservice, to be adapted to tesla)
 
