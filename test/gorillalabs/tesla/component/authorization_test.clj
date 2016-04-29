@@ -8,7 +8,9 @@
   (let [test-state {:authorization {:secret   "12345678901234567890123456789012"
                                     :options  {:alg :a256kw
                                                :enc :a128gcm}
-                                    :authdata {:admin "password"}}}
+                                    :authdata {:admin {:roles [:some_role]
+                                                       :password "password"
+                                                       }}}}
         create-authorization #'auth/create-authorization]
     (with-redefs [config/configuration test-state]
       (with-redefs [auth/authorization (create-authorization)]
