@@ -1,10 +1,18 @@
-(defproject gorillalabs/tesla "0.3.0-SNAPSHOT"
+(defproject gorillalabs/tesla "0.3.0"
   :description "basic microservice."
   :url "https://github.com/otto-de/tesla-microservice"
   :license {:name "Apache License 2.0"
             :url  "http://www.apache.org/license/LICENSE-2.0.html"}
   :scm {:name "git"
         :url  "https://github.com/gorillalabs/tesla"}
+  :mirrors { "central"  {:name         "Nexus"
+                        :url          "http://172.18.101.210/repository/maven-public/"
+                        :repo-manager true}
+            #"clojars" {:name         "Nexus"
+                        :url          "http://172.18.101.210/repository/clojars-public/"
+                        :repo-manager true} }
+  :deploy-repositories [["releases" {:url "http://172.18.101.210/repository/CYPP-lib-releases/"
+                                     :creds :gpg}]]   ;; make sure you have your ~/.lein/credentials.clj.gpg setup correctly:
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [mount "0.1.10"]
                  [gorillalabs/config "1.0.3"]
@@ -54,8 +62,8 @@
                  [com.thinkaurelius.titan/titan-cassandra "1.0.0"]
                  [com.thinkaurelius.titan/titan-lucene "1.0.0"]
                  ]
-  
-  
+
+
 
   ;;  :filespecs [{:type :paths :paths ["test-utils"]}]
 
