@@ -5,14 +5,6 @@
             :url  "http://www.apache.org/license/LICENSE-2.0.html"}
   :scm {:name "git"
         :url  "https://github.com/gorillalabs/tesla"}
-  :mirrors { "central"  {:name         "Nexus"
-                        :url          "http://172.18.101.210/repository/maven-public/"
-                        :repo-manager true}
-            #"clojars" {:name         "Nexus"
-                        :url          "http://172.18.101.210/repository/clojars-public/"
-                        :repo-manager true} }
-  :deploy-repositories [["releases" {:url "http://172.18.101.210/repository/CYPP-lib-releases/"
-                                     :creds :gpg}]]   ;; make sure you have your ~/.lein/credentials.clj.gpg setup correctly:
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [mount "0.1.10"]
                  [gorillalabs/config "1.0.3"]
@@ -82,7 +74,8 @@
                                       [org.clojure/tools.namespace "0.2.11"]
                                       [expectations "2.1.4"]
                                       [ring-mock "0.1.5"]]
-                       :plugins      [[lein-ancient "0.6.8"]
+                       :plugins      [[lein-pprint "1.1.1"]
+                                      [lein-ancient "0.6.8"]
                                       [lein-marginalia "0.8.0"]
                                       [lein-environ "1.0.2"]]
 
