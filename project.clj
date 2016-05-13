@@ -1,4 +1,4 @@
-(defproject gorillalabs/tesla "0.3.0"
+(defproject gorillalabs/tesla "0.3.1-SNAPSHOT"
   :description "basic microservice."
   :url "https://github.com/otto-de/tesla-microservice"
   :license {:name "Apache License 2.0"
