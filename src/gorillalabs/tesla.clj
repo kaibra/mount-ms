@@ -3,7 +3,7 @@
     [mount.core :as mnt]
     [beckon :as beckon]
     [clojure.tools.logging :as log]
-    [environ.core :as env :only [env]]
+    [environ.core :as env]
     [gorillalabs.tesla.component.appstate :as appstate]
     [gorillalabs.tesla.component.configuration :as config]
     [gorillalabs.tesla.component.metrics :as metrics]
@@ -11,7 +11,6 @@
     [gorillalabs.tesla.component.handler :as handler]
     [gorillalabs.tesla.component.health :as health]
     [gorillalabs.tesla.component.quartzite :as quartzite]
-    [gorillalabs.tesla.component.mongo :as mongo]
     [gorillalabs.tesla.component.titan :as titan]
     ))
 

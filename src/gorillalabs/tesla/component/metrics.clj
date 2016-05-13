@@ -16,6 +16,7 @@
 
 (defmulti start-reporter! (fn [reporter _ _] reporter))
 
+
 (defmethod start-reporter! :graphite [_ registry config]
   (let [prefix (fn prefix [config]
                  (str (config/config config [:metrics :graphite :prefix]) "." (config/external-hostname config)))

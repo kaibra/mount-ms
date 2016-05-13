@@ -1,7 +1,7 @@
 (ns gorillalabs.tesla.component.appstate
   (:require [mount.core :as mnt]
             [de.otto.status :as s]
-            [clojure.data.json :as json :only [write-str]]
+            [clojure.data.json :as json]
             [clojure.tools.logging :as log]
             [clojure.string :as str]
             [clj-time.local :as local-time]
