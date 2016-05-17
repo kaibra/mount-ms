@@ -1,4 +1,4 @@
-(defproject gorillalabs/tesla "0.4.4-SNAPSHOT"
+(defproject gorillalabs/tesla "0.4.4"
   :description "basic microservice."
   :plugins [[lein-modules "0.3.11"]]
   :modules {:dirs       ["core/" "components/mongo" "components/titan/" "components/quartzite/"]
@@ -26,12 +26,12 @@
   :release-tasks [["vcs" "assert-committed"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
                   ["modules" "change" "version" "leiningen.release/bump-version" "release"]
-                  ;["vcs" "commit"]
-                  ;["vcs" "tag" "v"]
-                  ;["modules" "deploy"]
-                  ;["change" "version" "leiningen.release/bump-version"]
-                  ;["modules" "change" "version" "leiningen.release/bump-version"]
-                  ;["vcs" "commit"]
-                  ;["vcs" "push"]
+                  ["vcs" "commit"]
+                  ["vcs" "tag" "v"]
+                  ["modules" "deploy"]
+                  ["change" "version" "leiningen.release/bump-version"]
+                  ["modules" "change" "version" "leiningen.release/bump-version"]
+                  ["vcs" "commit"]
+                  ["vcs" "push"]
                   ]
   )
