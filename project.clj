@@ -1,9 +1,19 @@
-(defproject gorillalabs/tesla "0.3.1-SNAPSHOT"
+(defproject gorillalabs/tesla "0.4.1-SNAPSHOT"
   :description "basic microservice."
-  :url "https://github.com/otto-de/tesla-microservice"
-  :license {:name "Apache License 2.0"
-            :url  "http://www.apache.org/license/LICENSE-2.0.html"}
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :plugins [[lein-modules "0.3.11"]]
+  :modules {:dirs       ["." "components/mongo" "components/titan"]
+            :subprocess nil
+            :inherited  {:url                 "https://github.com/gorillalabs/tesla"
+                         :license             {:name "Apache License 2.0"
+                                               :url  "http://www.apache.org/license/LICENSE-2.0.html"}
+                         :deploy-repositories [["releases" :clojars]]
+                         :scm                 {:dir ".."}
+                         }
+            :versions   {org.clojure/clojure "1.8.0"
+                         org.clojure/tools.logging "0.3.1"
+                         }
+            }
+  :dependencies [[org.clojure/clojure :version]
                  [mount "0.1.10"]
                  [gorillalabs/config "1.0.3"]
                  [org.clojure/data.json "0.2.6"]
@@ -13,12 +23,11 @@
 
 
                  ;; Logging
-                 [org.clojure/tools.logging "0.3.1"]
+                 [org.clojure/tools.logging :version]
                  [org.slf4j/slf4j-api "1.7.21"]
                  [org.slf4j/log4j-over-slf4j "1.7.21"]
                  [ch.qos.logback/logback-core "1.1.7"]
                  [ch.qos.logback/logback-classic "1.1.7"]
-
 
                  ;; HttpKit
                  [http-kit "2.1.19"]
@@ -40,19 +49,7 @@
                  [metrics-clojure "2.6.1"]
                  [metrics-clojure-graphite "2.6.1"]
 
-                 ;; quartzite
-                 [clojurewerkz/quartzite "2.0.0"]
-
-                 ;; mongo
-                 [com.novemberain/monger "3.0.2"]
-
-
-                 ;; titan
-                 [gorillalabs/titanium "1.0.0-beta3-SNAPSHOT"]
-                 [com.thinkaurelius.titan/titan-cassandra "1.0.0"]
-                 [com.thinkaurelius.titan/titan-lucene "1.0.0"]
-                 ]
-
+]
 
 
   :exclusions [org.clojure/clojure
@@ -72,13 +69,15 @@
   ;;
   :scm {:name "git"
         :url  "https://github.com/gorillalabs/tesla"}
-  :deploy-repositories [["releases" :clojars]]
+
   :release-tasks [["vcs" "assert-committed"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
+                  ["modules" "change" "version" "leiningen.release/bump-version" "release"]
                   ["vcs" "commit"]
                   ["vcs" "tag" "v"]
-                  ["deploy"]
+                  ["modules" "deploy"]
                   ["change" "version" "leiningen.release/bump-version"]
+                  ["modules" "change" "version" "leiningen.release/bump-version"]
                   ["vcs" "commit"]
                   ["vcs" "push"]]
 
@@ -92,7 +91,8 @@
                                       [lein-ancient "0.6.8"]
                                       [lein-marginalia "0.8.0"]
                                       [lein-environ "1.0.3"]
-                                      [jonase/eastwood "0.2.3"]]
+                                      [jonase/eastwood "0.2.3"]
+                                      ]
 
                        :env          {:system "SYSTEM"
                                       :env    "ENV"}}}

@@ -10,8 +10,6 @@
     [gorillalabs.tesla.component.keep-alive :as keep-alive]
     [gorillalabs.tesla.component.handler :as handler]
     [gorillalabs.tesla.component.health :as health]
-    [gorillalabs.tesla.component.quartzite :as quartzite]
-    [gorillalabs.tesla.component.titan :as titan]
     ))
 
 (defn wait! [conf]
