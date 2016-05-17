@@ -1,7 +1,7 @@
-(defproject gorillalabs/tesla "0.4.1"
+(defproject gorillalabs/tesla "0.4.2-SNAPSHOT"
   :description "basic microservice."
   :plugins [[lein-modules "0.3.11"]]
-  :modules {:dirs       ["." "components/mongo" "components/titan"]
+  :modules {:dirs       ["." "components/mongo" "components/titan" "components/quartzite"]
             :subprocess nil
             :inherited  {:url                 "https://github.com/gorillalabs/tesla"
                          :license             {:name "Apache License 2.0"
@@ -71,12 +71,10 @@
         :url  "https://github.com/gorillalabs/tesla"}
 
   :release-tasks [["vcs" "assert-committed"]
-                  ["change" "version" "leiningen.release/bump-version" "release"]
                   ["modules" "change" "version" "leiningen.release/bump-version" "release"]
                   ["vcs" "commit"]
                   ["vcs" "tag" "v"]
                   ["modules" "deploy"]
-                  ["change" "version" "leiningen.release/bump-version"]
                   ["modules" "change" "version" "leiningen.release/bump-version"]
                   ["vcs" "commit"]
                   ["vcs" "push"]]

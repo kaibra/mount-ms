@@ -1,4 +1,4 @@
-(defproject gorillalabs.tesla/titan "0.4.1"
+(defproject gorillalabs.tesla/titan "0.4.2-SNAPSHOT"
             :plugins [[lein-modules "0.3.11"]]
             :description "A titan component"
             :dependencies [[gorillalabs/titanium "1.0.0-beta3-SNAPSHOT"]
