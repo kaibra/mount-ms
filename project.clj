@@ -5,6 +5,7 @@
             :url  "http://www.apache.org/license/LICENSE-2.0.html"}
   :scm {:name "git"
         :url  "https://github.com/gorillalabs/tesla"}
+  :deploy-repositories [["releases" :clojars]]
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [mount "0.1.10"]
                  [gorillalabs/config "1.0.3"]
