@@ -3,9 +3,6 @@
   :url "https://github.com/otto-de/tesla-microservice"
   :license {:name "Apache License 2.0"
             :url  "http://www.apache.org/license/LICENSE-2.0.html"}
-  :scm {:name "git"
-        :url  "https://github.com/gorillalabs/tesla"}
-  :deploy-repositories [["releases" :clojars]]
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [mount "0.1.10"]
                  [gorillalabs/config "1.0.3"]
@@ -58,18 +55,34 @@
 
 
 
-  ;;  :filespecs [{:type :paths :paths ["test-utils"]}]
-
   :exclusions [org.clojure/clojure
                org.slf4j/slf4j-nop
                org.slf4j/slf4j-log4j12
                log4j
                commons-logging/commons-logging]
 
+  :test-paths ["test" "test-resources" "test-utils"]
   :test-selectors {:default     (constantly true)
                    :integration :integration
                    :unit        :unit
                    :all         (constantly true)}
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Releasing stuff
+  ;;
+  :scm {:name "git"
+        :url  "https://github.com/gorillalabs/tesla"}
+  :deploy-repositories [["releases" :clojars]]
+  :release-tasks [["vcs" "assert-committed"]
+                  ["change" "version" "leiningen.release/bump-version" "release"]
+                  ["vcs" "commit"]
+                  ["vcs" "tag" "v"]
+                  ["deploy"]
+                  ["change" "version" "leiningen.release/bump-version"]
+                  ["vcs" "commit"]
+                  ["vcs" "push"]]
+
+
   :profiles {:uberjar {:aot :all}
              :dev     {:dependencies [[javax.servlet/servlet-api "2.5"]
                                       [org.clojure/tools.namespace "0.2.11"]
@@ -83,4 +96,4 @@
 
                        :env          {:system "SYSTEM"
                                       :env    "ENV"}}}
-  :test-paths ["test" "test-resources" "test-utils"])
+  )
