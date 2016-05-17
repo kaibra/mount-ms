@@ -1,4 +1,4 @@
-(defproject gorillalabs/tesla "0.4.2-SNAPSHOT"
+(defproject gorillalabs/tesla "0.4.2"
   :description "basic microservice."
   :plugins [[lein-modules "0.3.11"]]
   :modules {:dirs       ["." "components/mongo" "components/titan" "components/quartzite"]
