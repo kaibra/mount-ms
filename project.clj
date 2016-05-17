@@ -1,9 +1,9 @@
-(defproject gorillalabs/tesla "0.4.2"
+(defproject gorillalabs/tesla "0.4.3-SNAPSHOT"
   :description "basic microservice."
   :plugins [[lein-modules "0.3.11"]]
   :modules {:dirs       ["." "components/mongo" "components/titan" "components/quartzite"]
             :subprocess nil
-            :inherited  {:url                 "https://github.com/gorillalabs/tesla"
+            :inherited {:url                 "https://github.com/gorillalabs/tesla"
                          :license             {:name "Apache License 2.0"
                                                :url  "http://www.apache.org/license/LICENSE-2.0.html"}
                          :deploy-repositories [["releases" :clojars]]
