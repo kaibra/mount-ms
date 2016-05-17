@@ -24,11 +24,14 @@
              {:dependencies [[org.clojure/clojure "_"]]}}
 
   :release-tasks [["vcs" "assert-committed"]
+                  ["change" "version" "leiningen.release/bump-version" "release"]
                   ["modules" "change" "version" "leiningen.release/bump-version" "release"]
-                  ["vcs" "commit"]
-                  ["vcs" "tag" "v"]
-                  ["modules" "deploy"]
-                  ["modules" "change" "version" "leiningen.release/bump-version"]
-                  ["vcs" "commit"]
-                  ["vcs" "push"]]
+                  ;["vcs" "commit"]
+                  ;["vcs" "tag" "v"]
+                  ;["modules" "deploy"]
+                  ;["change" "version" "leiningen.release/bump-version"]
+                  ;["modules" "change" "version" "leiningen.release/bump-version"]
+                  ;["vcs" "commit"]
+                  ;["vcs" "push"]
+                  ]
   )
