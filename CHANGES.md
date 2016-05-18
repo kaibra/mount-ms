@@ -1,6 +1,11 @@
 ## Breaking changes
 
-_tesla-microservice_ is used for a number of different services now. Still it is a work in progress. This section will document breaking changes. Likely you will find corresponding changes in [tesla-examples](https://github.com/otto-de/tesla-examples).
+### 0.4.x
+
+Using lein modules to build a core and different components. If you're using the core, you just
+need to update your group-id/artifact-id, otherwise you also need to add dependencies to the components you actually need.
+
+Currently, these are Mongo, Quartzite and Titan.
 
 ### 0.1.17
 Replaced property based configuration by EDN based configuration using [gorillalabs/config](https://github.com/gorillalabs/config).
