@@ -8,6 +8,11 @@
                                                :url  "http://www.apache.org/license/LICENSE-2.0.html"}
                          :deploy-repositories [["releases" :clojars]]
                          :scm                 {:dir ".."}
+                         :exclusions [org.clojure/clojure
+                                      org.slf4j/slf4j-nop
+                                      org.slf4j/slf4j-log4j12
+                                      log4j
+                                      commons-logging/commons-logging]
                          }
             :versions   {org.clojure/clojure       "1.8.0"
                          org.clojure/tools.logging "0.3.1"
