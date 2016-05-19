@@ -7,6 +7,7 @@
                            [beckon "0.1.1"]
                            [environ "1.0.3"]
                            [clj-time "0.11.0"]
+                           [joda-time "2.9.3"] ;; fix a version (otherwise we have version clashes)
 
 
                            ;; Logging
@@ -22,6 +23,8 @@
                            ;; Authentication
                            [ring/ring-json "0.4.0"]
                            [buddy "0.13.0"]
+                           [cheshire "5.6.1"]  ;; fix a version (otherwise we have version clashes)
+                           [org.clojure/tools.reader "0.10.0"] ;; fix a version (otherwise we have version clashes)
 
 
                            ;; io
@@ -73,10 +76,10 @@
                                                 [expectations "2.1.8"]
                                                 [ring-mock "0.1.5"]]
                                  :plugins      [[lein-pprint "1.1.1"]
-                                                [lein-ancient "0.6.8"]
+                                                [lein-ancient "0.6.8"  :exclusions [org.clojure/clojure]]
                                                 [lein-marginalia "0.8.0"]
                                                 [lein-environ "1.0.3"]
-                                                [jonase/eastwood "0.2.3"]
+                                                [jonase/eastwood "0.2.3"  :exclusions [org.clojure/clojure]]
                                                 ]
 
                                  :env          {:system "SYSTEM"
