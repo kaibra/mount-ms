@@ -1,6 +1,7 @@
-(defproject gorillalabs/tesla "0.4.6"
+(defproject gorillalabs/tesla "0.4.7-SNAPSHOT"
   :description "basic microservice."
-  :plugins [[lein-modules "0.3.11"]]
+  :plugins [[lein-modules "0.3.11"]
+            [lein-pprint "1.1.1"]]
   :modules {:dirs       ["core/" "components/mongo" "components/titan/" "components/quartzite/"]
             :subprocess nil
             :inherited  {:url                 "https://github.com/gorillalabs/tesla"
@@ -8,11 +9,11 @@
                                                :url  "http://www.apache.org/license/LICENSE-2.0.html"}
                          :deploy-repositories [["releases" :clojars]]
                          :scm                 {:dir ".."}
-                         :exclusions [org.clojure/clojure
-                                      org.slf4j/slf4j-nop
-                                      org.slf4j/slf4j-log4j12
-                                      log4j
-                                      commons-logging/commons-logging]
+                         :exclusions          [org.clojure/clojure
+                                               org.slf4j/slf4j-nop
+                                               org.slf4j/slf4j-log4j12
+                                               log4j
+                                               commons-logging/commons-logging]
                          }
             :versions   {org.clojure/clojure       "1.8.0"
                          org.clojure/tools.logging "0.3.1"
