@@ -16,9 +16,7 @@
                                                commons-logging/commons-logging]
                          }
             :versions   {org.clojure/clojure       "1.8.0"
-                         org.clojure/tools.logging "0.3.1"
-                         }
-            }
+                         org.clojure/tools.logging "0.3.1"}}
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Releasing stuff
@@ -38,6 +36,12 @@
                   ["change" "version" "leiningen.release/bump-version"]
                   ["modules" "change" "version" "leiningen.release/bump-version"]
                   ["vcs" "commit"]
-                  ["vcs" "push"]
-                  ]
-  )
+                  ["vcs" "push"]])
+
+;; You always work on a SNAPSHOT version locally, but you shouldn't push one to a repository like Clojars.
+;; `lein modules install` will install into your local repository, necessary to start coding.
+;; `lein modules checkout` will create checkout directories where necessary
+;; `lein modules do check, test` to run checks
+;; `lein modules ancient upgrade` to upgrade dependencies
+;; `lein modules eastwood` to lint code
+;; use `LEIN_SNAPSHOTS_IN_RELEASE=true lein release` to release tesla
