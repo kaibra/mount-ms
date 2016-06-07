@@ -25,7 +25,18 @@
         :url  "https://github.com/gorillalabs/tesla"}
 
   :profiles {:provided
-             {:dependencies [[org.clojure/clojure "_"]]}}
+             {:dependencies [[org.clojure/clojure "_"]]}
+             :dev     {:dependencies [[javax.servlet/servlet-api "2.5"]
+                                      [org.clojure/tools.namespace "0.2.11"]
+                                      [expectations "2.1.8"]
+                                      [ring-mock "0.1.5"]]
+                       :plugins      [[lein-pprint "1.1.1"]
+                                      [lein-ancient "0.6.8"  :exclusions [org.clojure/clojure]]
+                                      [lein-marginalia "0.8.0"]
+                                      [lein-kibit "0.1.2"]
+                                      [jonase/eastwood "0.2.3"  :exclusions [org.clojure/clojure]]
+                                      ]
+                       }}
 
   :release-tasks [["vcs" "assert-committed"]
                   ["change" "version" "leiningen.release/bump-version" "release"]

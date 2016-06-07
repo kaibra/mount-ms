@@ -54,21 +54,6 @@
                              :unit        :unit
                              :all         (constantly true)}
 
-            ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-            ;; Releasing stuff
-            ;;
-            :scm {:name "git"
-                  :url  "https://github.com/gorillalabs/tesla"}
-
-            :release-tasks [["vcs" "assert-committed"]
-                            ["modules" "change" "version" "leiningen.release/bump-version" "release"]
-                            ["vcs" "commit"]
-                            ["vcs" "tag" "v"]
-                            ["modules" "deploy"]
-                            ["modules" "change" "version" "leiningen.release/bump-version"]
-                            ["vcs" "commit"]
-                            ["vcs" "push"]]
-
 
             :profiles {:uberjar {:aot :all}
                        :dev     {:dependencies [[javax.servlet/servlet-api "2.5"]

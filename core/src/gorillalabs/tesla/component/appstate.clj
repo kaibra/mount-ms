@@ -5,10 +5,9 @@
             [clojure.tools.logging :as log]
             [clojure.string :as str]
             [clj-time.local :as local-time]
-            [metrics.timers :as timers]
             [gorillalabs.tesla.component.configuration :as config]
             [gorillalabs.tesla.component.handler :as handler]
-            [ring.middleware.defaults :as ring-defaults]))
+            [clojure.string :refer [join split]]))
 
 (declare appstate)
 
@@ -41,7 +40,7 @@
   (str/upper-case (name kw)))
 
 (defn- sanitize-str [s]
-  (apply str (repeat (count s) "*")))
+  (join (repeat (count s) "*")))
 
 (defn- sanitize-mapentry [checklist [k v]]
   {k (if (some true? (map #(.contains (name k) %) checklist))
