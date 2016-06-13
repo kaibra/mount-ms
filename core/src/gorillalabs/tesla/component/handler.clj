@@ -55,7 +55,7 @@
     (try
       (handler request)
       (catch Exception e
-        (do (log/error (str "caught exception: " (.getMessage e)))
+        (do (log/error e (str "caught exception: " (.getMessage e)))
             (exception_caugth))))))
 
 (defn- wrap-enforce-json-content-type

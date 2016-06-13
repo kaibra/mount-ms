@@ -6,34 +6,44 @@
             [gorillalabs.tesla.component.handler :as handler]
             [mount.core :as mnt]))
 
+;; TODO: Sorry, much is broken here
+;; - Handler (use the current handlers even if handlers changed after http-kit started. Otherwise, you'll loose the ability to change stuff on the fly and you'll have to start http-kit after your handler-using-components. [TODO]
+
+(defmacro condasit->
+  "A mixture of cond-> and as-> allowing more flexibility in the test and step forms, also binding `it` to the result of the cond predicate."
+  [expr name & clauses]
+  (assert (even? (count clauses)))
+  (let [pstep (fn [[test step]] `(if-let [it ~test] ~step ~name))]
+    `(let [~name ~expr
+           ~@(interleave (repeat name) (map pstep (partition 2 clauses)))]
+       ~name)))
 
 (def default-port 3000)
 
-(defn parser-string-config [config element default-value]
-  (get-in config [:config element] default-value))
-
-(defn parser-integer-config [config element default-value]
-  (try
-    (Integer. (parser-string-config config element default-value))
-    (catch NumberFormatException e default-value)))
-
 (defn server-config [config]
-  {:port       (parser-integer-config config :server-port default-port)
-   :ip         (parser-string-config config :server-bind "0.0.0.0")
-   :thread     (parser-integer-config config :server-thread 4)
-   :queue-size (parser-integer-config config :server-queue-size 20000)
-   :max-body   (parser-integer-config config :server-max-body 8388608)
-   :max-line   (parser-integer-config config :server-max-line 4096)
-   })
+  (condasit-> {:port (get-in config [:httpkit :port] default-port)
+               :ip   (get-in config [:httpkit :bind] "0.0.0.0")}
+              server-conf
 
+              (get-in config [:httpkit :thread])
+              (assoc server-conf :thread it)
+
+              (get-in config [:httpkit :queue-size])
+              (assoc server-conf :queue-size it)
+
+              (get-in config [:httpkit :max-body])
+              (assoc server-conf :max-body it)
+
+              (get-in config [:httpkit :max-line])
+              (assoc server-conf :max-line it)))
 
 
 (defn- start []
   (log/info "-> starting httpkit")
   (let [server-config (server-config config/configuration)
-        routes ["" @handler/handler]
-        _ (log/info "Starting httpkit with port " (server-config :port) " and bind " (server-config :ip) ":" routes)
-        server (httpkit/run-server (bidi.ring/make-handler routes) server-config)]
+        routes        ["" @handler/handler]
+        _             (log/info "Starting httpkit with port " (server-config :port) " and bind " (server-config :ip) ":" routes)
+        server        (httpkit/run-server (bidi.ring/make-handler routes) server-config)]
     server))
 
 (defn- stop [server]
