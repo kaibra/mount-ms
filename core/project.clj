@@ -1,4 +1,4 @@
-(defproject gorillalabs.tesla/core "0.4.9"
+(defproject gorillalabs.tesla/core "0.4.10-SNAPSHOT"
             :plugins [[lein-modules "0.3.11"]]
             :description "basic microservice."
             :dependencies [[mount "0.1.10"]
