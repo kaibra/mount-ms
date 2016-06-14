@@ -76,11 +76,10 @@
   (-> handler
       (wrap-exception-handling)
       (wrap-enforce-json-content-type)
-      (ring-defaults/wrap-defaults ring-defaults/site-defaults)
+      (ring-defaults/wrap-defaults ring-defaults/secure-api-defaults)
       (wrap-json-body)
       (wrap-json-params)
-      (wrap-json-response)
-      ))
+      (wrap-json-response)))
 
 (defn wrap-secure-api [handler authorization]
   (-> handler
@@ -106,7 +105,7 @@
           :cookies false
           :static false
           :proxy true)
-        (assoc-in [:security :hsts] false)
-        (assoc-in [:security :ssl-redirect] false)
+        (assoc-in [:security :hsts] false)        ;; TODO: YES!
+        (assoc-in [:security :ssl-redirect] false) ;; TODO: YES!
         )))
 
