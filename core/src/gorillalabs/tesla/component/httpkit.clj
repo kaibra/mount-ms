@@ -9,6 +9,8 @@
 ;; TODO: Sorry, much is broken here
 ;; - Handler (use the current handlers even if handlers changed after http-kit started. Otherwise, you'll loose the ability to change stuff on the fly and you'll have to start http-kit after your handler-using-components. [TODO]
 
+(declare httpkit)
+
 (defmacro condasit->
   "A mixture of cond-> and as-> allowing more flexibility in the test and step forms, also binding `it` to the result of the cond predicate."
   [expr name & clauses]
@@ -42,7 +44,7 @@
   (log/info "-> starting httpkit")
   (let [server-config (server-config config/configuration)
         routes        ["" @handler/handler]
-        _             (log/info "Starting httpkit with port " (server-config :port) " and bind " (server-config :ip) ":" routes)
+        _             (log/info "Starting httpkit with port" (server-config :port) "and bind" (server-config :ip) ":" routes)
         server        (httpkit/run-server (bidi.ring/make-handler routes) server-config)]
     server))
 
