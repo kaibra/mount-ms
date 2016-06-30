@@ -23,7 +23,7 @@
                            ;; Authentication
                            [ring/ring-json "0.4.0"]
                            [buddy "0.13.0"]
-                           [cheshire "5.6.1"]  ;; fix a version (otherwise we have version clashes)
+                           [cheshire "5.6.3"]  ;; fix a version (otherwise we have version clashes)
                            [org.clojure/tools.reader "0.10.0"] ;; fix a version (otherwise we have version clashes)
 
 
