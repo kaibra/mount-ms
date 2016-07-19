@@ -19,26 +19,30 @@ Tesla is a fork of [Tesla Microservices by Otto.de](https://github.com/otto-de/t
 
 [![Build Status](https://travis-ci.org/gorillalabs/tesla.svg)](https://travis-ci.org/gorillalabs/tesla)
 
-## goriallalabs/tesla (Parent project)
+## gorillalabs/tesla (Parent project)
 [![Dependencies Status](http://jarkeeper.com/gorillalabs/tesla/status.svg)](http://jarkeeper.com/gorillalabs.tesla/core)
 [![Downloads](https://jarkeeper.com/gorillalabs/tesla/downloads.svg)](https://jarkeeper.com/gorillalabs.tesla/core)
 [![Clojars Project](https://img.shields.io/clojars/v/gorillalabs.tesla/core.svg)](https://clojars.org/gorillalabs.tesla/core)
 
-## goriallalabs.tesla/core
+## gorillalabs.tesla/core
 [![Downloads](https://jarkeeper.com/gorillalabs.tesla/core/downloads.svg)](https://jarkeeper.com/gorillalabs.tesla/core)
 [![Clojars Project](https://img.shields.io/clojars/v/gorillalabs.tesla/core.svg)](https://clojars.org/gorillalabs.tesla/core)
 
-## goriallalabs.tesla/titan
+## gorillalabs.tesla/titan
 [![Downloads](https://jarkeeper.com/gorillalabs.tesla/titan/downloads.svg)](https://jarkeeper.com/gorillalabs.tesla/titan)
 [![Clojars Project](https://img.shields.io/clojars/v/gorillalabs.tesla/titan.svg)](https://clojars.org/gorillalabs.tesla/titan)
 
-## goriallalabs.tesla/mongo
+## gorillalabs.tesla/mongo
 [![Downloads](https://jarkeeper.com/gorillalabs.tesla/mongo/downloads.svg)](https://jarkeeper.com/gorillalabs.tesla/mongog)
 [![Clojars Project](https://img.shields.io/clojars/v/gorillalabs.tesla/mongo.svg)](https://clojars.org/gorillalabs.tesla/mongo)
 
-## goriallalabs.tesla/quarzite
+## gorillalabs.tesla/quarzite
 [![Downloads](https://jarkeeper.com/gorillalabs.tesla/quartzite/downloads.svg)](https://jarkeeper.com/gorillalabs.tesla/quartzite)
 [![Clojars Project](https://img.shields.io/clojars/v/gorillalabs.tesla/quartzite.svg)](https://clojars.org/gorillalabs.tesla/quartzite)
+
+## gorillalabs.tesla/sente
+[![Downloads](https://jarkeeper.com/gorillalabs.tesla/sente/downloads.svg)](https://jarkeeper.com/gorillalabs.tesla/sente)
+[![Clojars Project](https://img.shields.io/clojars/v/gorillalabs.tesla/sente.svg)](https://clojars.org/gorillalabs.tesla/sente)
 
 
 ## Breaking changes
