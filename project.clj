@@ -2,7 +2,7 @@
   :description "basic microservice."
   :plugins [[lein-modules "0.3.11"]
             [lein-pprint "1.1.1"]]
-  :modules {:dirs       ["core/" "components/mongo" "components/titan/" "components/quartzite/"]
+  :modules {:dirs       ["core/" "components/mongo" "components/titan/" "components/quartzite/" "components/sente/"]
             :subprocess nil
             :inherited  {:url                 "https://github.com/gorillalabs/tesla"
                          :license             {:name "Apache License 2.0"
