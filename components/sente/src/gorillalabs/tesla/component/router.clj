@@ -20,7 +20,7 @@
   (swap! (:events router-component) assoc id callback))
 
 (defn deregister [router-component id]
-  (swap! router-component dissoc id))
+  (swap! (:events  router-component) dissoc id))
 
 (defn- start []
   (log/info "-> Starting sente router")
