@@ -44,6 +44,10 @@ Tesla is a fork of [Tesla Microservices by Otto.de](https://github.com/otto-de/t
 [![Downloads](https://jarkeeper.com/gorillalabs.tesla/sente/downloads.svg)](https://jarkeeper.com/gorillalabs.tesla/sente)
 [![Clojars Project](https://img.shields.io/clojars/v/gorillalabs.tesla/sente.svg)](https://clojars.org/gorillalabs.tesla/sente)
 
+## gorillalabs.tesla/aws-s3
+[![Downloads](https://jarkeeper.com/gorillalabs.tesla/aws-s3/downloads.svg)](https://jarkeeper.com/gorillalabs.tesla/aws-s3)
+[![Clojars Project](https://img.shields.io/clojars/v/gorillalabs.tesla/aws-s3.svg)](https://clojars.org/gorillalabs.tesla/aws-s3)
+
 
 ## Breaking changes
 
