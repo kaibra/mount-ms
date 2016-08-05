@@ -38,8 +38,7 @@
                            ;; metrics
                            [metrics-clojure "2.6.1"]
                            [metrics-clojure-graphite "2.6.1"]
-
-                           ]
+                           [io.riemann/metrics3-riemann-reporter "0.4.2"]]
 
 
             :exclusions [org.clojure/clojure

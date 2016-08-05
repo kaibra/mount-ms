@@ -8,6 +8,7 @@
     [metrics.meters :as meters]
     [metrics.reporters.graphite :as graphite]
     [metrics.reporters.console :as console]
+    [gorillalabs.tesla.component.reporters.riemann :as riemann]
     [clojure.tools.logging :as log]
     [gorillalabs.tesla.component.configuration :as config])
   (:import
@@ -16,6 +17,17 @@
 
 (defmulti start-reporter! (fn [reporter _ _] reporter))
 
+(defmethod start-reporter! :riemann [_ registry config]
+  (let [reporter (riemann/reporter registry
+                                   {:host          (config/config config [:metrics :reporter :riemann :host] "127.0.0.1")
+                                    :port          (config/config config [:metrics :reporter :riemann :port] "5555")
+                                    :service       (config/config config [:metrics :reporter :riemann :service] "*unknown-service*")
+                                    :rate-unit     TimeUnit/SECONDS
+                                    :duration-unit TimeUnit/MILLISECONDS
+                                    :filter        MetricFilter/ALL})]
+    (log/info "-> starting riemann metrics reporter.")
+    (riemann/start reporter (int (config/config config [:metrics :riemann :interval-seconds] 10)))
+    reporter))
 
 (defmethod start-reporter! :graphite [_ registry config]
   (let [prefix (fn prefix [config]
