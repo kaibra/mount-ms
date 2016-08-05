@@ -14,8 +14,15 @@
                    }
 
  ;;; metrics
- :metrics         {:reporter "console"
-                   :console  {:interval 100}}
+ :metrics         {:reporter ;[:console :riemann]
+                   :console  {:interval 10}
+                   :riemann {:host "127.0.0.1"
+                             :port "5555"
+                             :service "tesla-metrics-test"
+                             :interval-seconds 10
+                             }
+
+                   }
 
  ;;; activate graphite like this:
  ; metrics.reporter=graphite#graphite.host=localhost#graphite.port=2003#graphite.prefix=my-app-prefix#graphite.interval.seconds=60server.port=8080
