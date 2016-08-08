@@ -1,4 +1,4 @@
-(defproject gorillalabs.tesla/quartzite "0.4.17-SNAPSHOT"
+(defproject gorillalabs.tesla/quartzite "0.4.17"
             :plugins [[lein-modules "0.3.11"]]
             :modules {:parent "../.."}
             :description "A quartzite component"
