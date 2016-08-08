@@ -8,7 +8,7 @@
 
 (defn- start []
   (log/info "-> Starting sente socket ")
-  (sente/make-channel-socket! (get-sch-adapter) {:packet :edn}))
+  (sente/make-channel-socket! (get-sch-adapter) {:packet :edn :user-id-fn (fn [ring-req] (str (java.util.UUID/randomUUID)))}))
 
 (defn- stop [self]
   (log/info "<- Stopping sente socket."))
