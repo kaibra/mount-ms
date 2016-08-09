@@ -24,7 +24,8 @@
     (lch/close ch)))
 
 (defn- start []
-  (let [connection (rmq/connect)]
+  (let [cfg (config/config config/configuration [:amqp :rabbit-mq])
+        connection (if cfg (rmq/connect cfg) (rmq/connect))]
     (declare-queues! connection)
     (atom {:connection connection
            :channels []})))
