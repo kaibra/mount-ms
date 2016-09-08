@@ -8,7 +8,9 @@
 (defn titan-config [config]
   (merge {"storage.backend"  "cassandrathrift"
           "index.search.backend" "lucene"
-          "index.search.directory" "/tmp/searchIndex"}
+          "index.search.directory" "/tmp/searchIndex"
+          "attributes.custom.attribute1.attribute-class" "clojure.lang.Keyword"
+          "attributes.custom.attribute1.serializer-class" "hamburg.cypp.KeywordSerializer"}
          config))
 
 (defn- start []
