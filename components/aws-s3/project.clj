@@ -1,4 +1,4 @@
-(defproject gorillalabs.tesla/aws-s3 "0.4.19"
+(defproject gorillalabs.tesla/aws-s3 "0.4.20-SNAPSHOT"
             :plugins [[lein-modules "0.3.11"]]
             :modules {:parent "../.."}
             :description "A component to enable simple access to aws s3 stores."
