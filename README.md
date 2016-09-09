@@ -48,6 +48,9 @@ Tesla is a fork of [Tesla Microservices by Otto.de](https://github.com/otto-de/t
 [![Downloads](https://jarkeeper.com/gorillalabs.tesla/aws-s3/downloads.svg)](https://jarkeeper.com/gorillalabs.tesla/aws-s3)
 [![Clojars Project](https://img.shields.io/clojars/v/gorillalabs.tesla/aws-s3.svg)](https://clojars.org/gorillalabs.tesla/aws-s3)
 
+## gorillalabs.tesla/timbre-logstash
+[![Downloads](https://jarkeeper.com/gorillalabs.tesla/timbre-logstash/downloads.svg)](https://jarkeeper.com/gorillalabs.tesla/timbre-logstash)
+[![Clojars Project](https://img.shields.io/clojars/v/gorillalabs.tesla/timbre-logstash.svg)](https://clojars.org/gorillalabs.tesla/timbre-logstash)
 
 ## Breaking changes
 
