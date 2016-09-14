@@ -32,7 +32,7 @@
                                       [ring-mock "0.1.5"]]
                        :plugins      [[lein-pprint "1.1.1"]
                                       [lein-ancient "0.6.8"  :exclusions [org.clojure/clojure]]
-                                      [lein-marginalia "0.8.0"]
+                                      [lein-marginalia "0.9.0"]
                                       [lein-kibit "0.1.2"]
                                       [jonase/eastwood "0.2.3"  :exclusions [org.clojure/clojure]]
                                       ]
