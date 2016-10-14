@@ -1,4 +1,4 @@
-(defproject gorillalabs.tesla/sente "0.4.22"
+(defproject gorillalabs.tesla/sente "0.4.23-SNAPSHOT"
             :plugins [[lein-modules "0.3.11"]]
             :modules {:parent "../.."}
             :description "sente websocket component"
