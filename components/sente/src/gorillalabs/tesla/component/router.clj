@@ -13,13 +13,13 @@
   (go-loop [event-msg (<! event-msg-channel)]
            (when event-msg
              (let [{:keys [id event ?reply-fn]} event-msg]
-               (go (if-let [event-fn (get @(:events router) id)]
-                     (try
+               (go (try
+                     (if-let [event-fn (get @(:events router) id)]
                        (event-fn event-msg)
                        (do (log/info "Unhandled event: %s" id)
                            (when ?reply-fn
-                             (?reply-fn {:umatched-event-as-echoed-from-from-server event})))
-                     (catch Exception e (log/error  "Caught exception: " (.getMessage e)))))
+                             (?reply-fn {:umatched-event-as-echoed-from-from-server event}))))
+                     (catch Exception e (log/error  "Caught exception: " (.getMessage e))))
                    ))
              (recur (<! event-msg-channel)))))
 
