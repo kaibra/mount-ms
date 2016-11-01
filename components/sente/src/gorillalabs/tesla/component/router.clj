@@ -16,7 +16,7 @@
                (go (try
                      (if-let [event-fn (get @(:events router) id)]
                        (event-fn event-msg)
-                       (do (log/info "Unhandled event: %s" id)
+                       (do (log/infof "Unhandled event: %s" id)
                            (when ?reply-fn
                              (?reply-fn {:umatched-event-as-echoed-from-from-server event}))))
                      (catch Exception e (log/error  "Caught exception: " (.getMessage e))))
@@ -30,7 +30,7 @@
   (swap! (:events router-component) dissoc id))
 
 (defn- start []
-  (log/info "-> Starting sente router")
+  (log/info "-> Starting sente router.")
   (let [event-msg-channel (chan)]
     (event-msg-handler event-msg-channel)
     {:event-msg-channel event-msg-channel :events (atom {}) :router (sente/start-server-chsk-router! (:ch-recv socket/socket) #(go (>! event-msg-channel %)))}))
