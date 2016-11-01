@@ -56,7 +56,7 @@
               :start (start)
               :stop (stop handler))
 
-(defn- exception_caugth [& _] {:status 500 :body {:message "Internal error"}})
+(defn- exception_caught [& _] {:status 500 :body {:message "Internal error"}})
 
 (defn- wrap-exception-handling
   "handles all not yet caught exceptions"
@@ -66,7 +66,7 @@
       (handler request)
       (catch Exception e
         (do (log/error e (str "caught exception: " (.getMessage e)))
-            (exception_caugth))))))
+            (exception_caught))))))
 
 (defn- wrap-enforce-json-content-type
   "sets the content type to application/json, regardless to any existing value"
