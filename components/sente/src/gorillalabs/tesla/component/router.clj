@@ -36,8 +36,6 @@
 ;; little event channel, from which we then further dispatch the
 ;; then-called "events" to their handlers.
 (defn- move-request-to-queue [request]
-  ;; (clojure.pprint/pprint "here comes the request")
-  ;; (clojure.pprint/pprint request)
   (go (>! (:event-msg-channel router) request)))
 
 (defn- start []
