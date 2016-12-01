@@ -6,13 +6,17 @@
 
 (declare socket)
 
-(defn- start []
-  (log/info "-> Starting sente socket ")
-  (sente/make-channel-socket! (get-sch-adapter) {:packet :edn :user-id-fn (fn [ring-req] (str (java.util.UUID/randomUUID)))}))
+(defn default-user-id-fn [ring-req]
+  (log/warn "There is no user-id-fn specified! Using client-id.")
+  (:client-id ring-req))
+
+(defn- start [{user-id-fn :user-id-fn :or {user-id-fn default-user-id-fn} :as args}]
+  (log/info "-> Starting sente socket w/ " args)
+  (sente/make-channel-socket! (get-sch-adapter) {:packet :edn :user-id-fn user-id-fn }))
 
 (defn- stop [self]
   (log/info "<- Stopping sente socket."))
 
 (mnt/defstate socket
-              :start (start)
+              :start (start (mnt/args))
               :stop (stop socket))

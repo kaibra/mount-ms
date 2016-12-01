@@ -1,7 +1,7 @@
 (defproject gorillalabs.tesla/core "0.4.26-SNAPSHOT"
             :plugins [[lein-modules "0.3.11"]]
             :description "basic microservice."
-            :dependencies [[mount "0.1.10"]
+            :dependencies [[mount "0.1.11"]
                            [gorillalabs/config "1.0.3"]
                            [org.clojure/data.json "0.2.6"]
                            [beckon "0.1.1"]
