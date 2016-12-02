@@ -1,4 +1,4 @@
-(defproject gorillalabs.tesla/titan "0.4.26"
+(defproject gorillalabs.tesla/titan "0.4.27"
             :plugins [[lein-modules "0.3.11"]]
             :modules {:parent "../.."}
             :description "A titan component"
