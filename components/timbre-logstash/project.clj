@@ -1,4 +1,4 @@
-(defproject gorillalabs.tesla/timbre-logstash "0.4.27"
+(defproject gorillalabs.tesla/timbre-logstash "0.4.28-SNAPSHOT"
             :plugins [[lein-modules "0.3.11"]]
             :modules {:parent "../.."}
             :description "A logastash component"
