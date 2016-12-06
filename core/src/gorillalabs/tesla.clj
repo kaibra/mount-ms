@@ -48,9 +48,9 @@
     (log/info "<- Stopping system.")
     (mnt/stop))
 
-  (defn start [custom-components]
+  (defn start [custom-components & more]
     (log/info "-> Starting system")
-    (apply mnt/start (concat (vals default-components) (vals custom-components)))
+    (apply mnt/start-with-args (or more {}) (concat (vals default-components) (vals custom-components)))
     (doseq [sig ["INT" "TERM"]]
       (reset! (beckon/signal-atom sig)
               #{stop}))))
