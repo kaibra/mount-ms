@@ -1,3 +1,13 @@
+;;; Telemetry component
+;;;
+;;; Sample configuration:
+;;;
+;;; {:telemetry {:riemann  {:host "127.0.0.2" :port 5555}
+;;;              :host     "app.eu.backend42" ;; leave out for automatic hostname detection
+;;;              :prefix   "app.backend."     ;; automatically prefix all service names
+;;;              :interval 60                 ;; seconds
+;;;              }}
+
 (ns gorillalabs.tesla.component.telemetry
   (:require [clojure.core.async :refer [<! >!! sliding-buffer chan timeout poll! close! go-loop]]
             [clojure.tools.logging :as log]
@@ -25,8 +35,15 @@
       (log/infof "Sending %d event(s) to telemetry backend..." (count events))
       (riemann/send-events client events))))
 
+(defn- prepare-event [telemetry event]
+  (let [prefix (:prefix (:config telemetry) "")]
+    (-> event
+      (assoc :time (now))
+      (assoc :host (:host telemetry))
+      (assoc :service (str prefix (:service event))))))
+
 (defn enqueue [telemetry event]
-  (>!! (:queue telemetry) (assoc event :time (now) :host (:host telemetry))))
+  (>!! (:queue telemetry) (prepare-event telemetry event)))
 
 (defn state [telemetry service state]
   (enqueue telemetry {:service service :state state}))
@@ -63,7 +80,8 @@
       (worker client queue (:interval config 30))
       {:host     (:host config (localhost))
        :r-client client
-       :queue    queue})))
+       :queue    queue
+       :config   config})))
 
 (defn- stop [telemetry]
   (log/info "<- stopping telemetry")
