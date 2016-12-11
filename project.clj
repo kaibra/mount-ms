@@ -1,4 +1,4 @@
-(defproject gorillalabs/tesla "0.4.30"
+(defproject gorillalabs/tesla "0.4.31-SNAPSHOT"
   :description "basic microservice."
   :plugins [[lein-modules "0.3.11"]
             [lein-pprint "1.1.1"]]
