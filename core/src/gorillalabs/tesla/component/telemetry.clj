@@ -9,7 +9,7 @@
 ;;;              }}
 
 (ns gorillalabs.tesla.component.telemetry
-  (:require [clojure.core.async :refer [<! >!! sliding-buffer chan timeout poll! close! go-loop]]
+  (:require [clojure.core.async :refer [<! >!! sliding-buffer chan timeout poll! close! go-loop alt!]]
             [clojure.tools.logging :as log]
             [gorillalabs.tesla.component.configuration :as config]
             [mount.core :as mnt]
@@ -66,26 +66,30 @@
                 result)
           expr)))
 
-(defn- worker [client queue interval]
+(defn- worker [killswitch client queue interval]
   (go-loop []
-    (<! (timeout (* interval 1000)))
-    (when (flush-queue client queue)
-      (recur))))
+    (let [timeout (timeout (* interval 1000))]
+      (alt!
+        killswitch :end
+        timeout (do (flush-queue client queue)
+                    (recur))))))
 
 (defn- start []
   (when-let [config (config/config config/configuration [:telemetry])]
     (log/info "-> starting telemetry")
-    (let [queue  (chan (sliding-buffer 100))
-          client (riemann/tcp-client (:riemann config))]
-      (worker client queue (:interval config 30))
-      {:host     (:host config (localhost))
-       :r-client client
-       :queue    queue
-       :config   config})))
+    (let [queue     (chan (sliding-buffer 100))
+          killswitch (chan)
+          client    (riemann/tcp-client (:riemann config))]
+      (worker killswitch client queue (:interval config 30))
+      {:host      (:host config (localhost))
+       :r-client  client
+       :queue     queue
+       :config    config
+       :killswitch killswitch})))
 
 (defn- stop [telemetry]
   (log/info "<- stopping telemetry")
-  (close! (:queue telemetry)))
+  (close! (:killswitch telemetry)))
 
 (mnt/defstate telemetry
   :start (start)
