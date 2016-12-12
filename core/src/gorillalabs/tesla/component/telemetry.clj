@@ -57,7 +57,7 @@
   (let [start (gensym)
         result (gensym)
         elapsed (gensym)]
-    (list 'if 'gorillalabs.tesla.component.telemetry/telemetry
+    (list 'if (list :host 'gorillalabs.tesla.component.telemetry/telemetry)
           (list 'let [start   (list 'System/currentTimeMillis)
                       result  expr
                       elapsed (list '- (list 'System/currentTimeMillis) start)]
