@@ -31,7 +31,7 @@
 
 (defn- flush-queue [client queue]
   (let [events (drain-queue queue)]
-    (when (seq events)
+    (when (and client (seq events))
       (log/infof "Sending %d event(s) to telemetry backend..." (count events))
       (riemann/send-events client events))))
 
@@ -75,17 +75,17 @@
                     (recur))))))
 
 (defn- start []
-  (when-let [config (config/config config/configuration [:telemetry])]
-    (log/info "-> starting telemetry")
-    (let [queue     (chan (sliding-buffer 100))
-          killswitch (chan)
-          client    (riemann/tcp-client (:riemann config))]
-      (worker killswitch client queue (:interval config 30))
-      {:host      (:host config (localhost))
-       :r-client  client
-       :queue     queue
-       :config    config
-       :killswitch killswitch})))
+  (log/info "-> starting telemetry")
+  (let [config     (config/config config/configuration [:telemetry])
+        queue      (chan (sliding-buffer 100))
+        killswitch (chan)
+        client     (when (:riemann config) (riemann/tcp-client (:riemann config)))]
+    (worker killswitch client queue (:interval config 30))
+    {:host       (:host config (localhost))
+     :r-client   client
+     :queue      queue
+     :config     config
+     :killswitch killswitch}))
 
 (defn- stop [telemetry]
   (log/info "<- stopping telemetry")
