@@ -1,4 +1,4 @@
-(defproject gorillalabs.tesla/mongo "0.4.33"
+(defproject gorillalabs.tesla/mongo "0.4.34-SNAPSHOT"
             :plugins [[lein-modules "0.3.11"]]
             :modules {:parent "../.."}
             :description "A mongo component"
