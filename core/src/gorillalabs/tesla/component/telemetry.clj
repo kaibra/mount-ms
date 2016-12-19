@@ -89,7 +89,9 @@
 
 (defn- stop [telemetry]
   (log/info "<- stopping telemetry")
-  (close! (:killswitch telemetry)))
+  (close! (:killswitch telemetry))
+  (when-let [client (:r-client telemetry)]
+    (riemann/close! client)))
 
 (mnt/defstate telemetry
   :start (start)
