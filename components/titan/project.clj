@@ -3,7 +3,7 @@
             :modules {:parent "../.."}
             :description "A titan component"
             :dependencies [[gorillalabs.tesla/core :version]
-                           [gorillalabs/titanium "1.0.5"]
+                           [gorillalabs/titanium "1.0.6"]
                            [gorillalabs/titan-cassandra "1.1.1"]
                            [gorillalabs/titan-lucene "1.1.1"]
                            [org.xerial.snappy/snappy-java "1.1.2.4"] ;; keep this version
