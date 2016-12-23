@@ -53,16 +53,18 @@
 
 (defmacro timed
   "Wraps expr in a timer and reports the elapsed time as a metric named with identifier."
-  [identifier expr]
+  [identifier expr & [props]]
   (let [start (gensym)
         result (gensym)
-        elapsed (gensym)]
+        elapsed (gensym)
+        values (gensym)]
     (list 'if (list :host 'gorillalabs.tesla.component.telemetry/telemetry)
           (list 'let [start   (list 'System/currentTimeMillis)
                       result  expr
-                      elapsed (list '- (list 'System/currentTimeMillis) start)]
+                      elapsed (list '- (list 'System/currentTimeMillis) start)
+                      values  (list 'merge props {:service identifier :metric elapsed :unit "ms" :type "timed"})]
                 (list 'log/infof "[%s] took %dms." identifier elapsed)
-                (list 'gorillalabs.tesla.component.telemetry/enqueue 'gorillalabs.tesla.component.telemetry/telemetry {:service identifier :metric elapsed})
+                (list 'gorillalabs.tesla.component.telemetry/enqueue 'gorillalabs.tesla.component.telemetry/telemetry values)
                 result)
           expr)))
 
