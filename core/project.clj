@@ -16,6 +16,7 @@
                            [org.slf4j/log4j-over-slf4j "1.7.21"]
                            [ch.qos.logback/logback-core "1.1.7"]
                            [ch.qos.logback/logback-classic "1.1.7"]
+                           [org.codehaus.janino/janino "2.7.8"]
 
                            ;; HttpKit
                            [http-kit "2.1.19"]
