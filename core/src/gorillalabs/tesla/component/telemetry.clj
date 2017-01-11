@@ -2,10 +2,11 @@
 ;;;
 ;;; Sample configuration:
 ;;;
-;;; {:telemetry {:riemann  {:host "127.0.0.2" :port 5555}
-;;;              :host     "app.eu.backend42" ;; leave out for automatic hostname detection
-;;;              :prefix   "app.backend."     ;; automatically prefix all service names
-;;;              :interval 60                 ;; seconds
+;;; {:telemetry {:riemann    {:host "127.0.0.2" :port 5555}
+;;;              :host       "app.eu.backend42" ;; leave out for automatic hostname detection
+;;;              :prefix     "app.backend."     ;; automatically prefix all service names
+;;;              :interval   60                 ;; seconds
+;;;              :queue-size 1000               ;; how many messages can be buffered
 ;;;              }}
 
 (ns gorillalabs.tesla.component.telemetry
@@ -79,7 +80,7 @@
 (defn- start []
   (log/info "-> starting telemetry")
   (let [config     (config/config config/configuration [:telemetry])
-        queue      (chan (sliding-buffer 100))
+        queue      (chan (sliding-buffer (:queue-size config 1000)))
         killswitch (chan)
         client     (when (:riemann config) (riemann/tcp-client (:riemann config)))]
     (worker killswitch client queue (:interval config 30))
