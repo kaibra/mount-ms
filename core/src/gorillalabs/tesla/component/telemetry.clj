@@ -32,7 +32,7 @@
 (defn- flush-queue [client queue]
   (let [events (drain-queue queue)]
     (when (and client (seq events))
-      (log/infof "Sending %d event(s) to telemetry backend..." (count events))
+      (log/debugf "Sending %d event(s) to telemetry backend..." (count events))
       (riemann/send-events client events))))
 
 (defn- prepare-event [telemetry event]
@@ -63,8 +63,8 @@
                       result  expr
                       elapsed (list '- (list 'System/currentTimeMillis) start)
                       values  (list 'merge props {:service identifier :metric elapsed :unit "ms" :type "timed"})]
-                (list 'log/infof "[%s] took %dms." identifier elapsed)
                 (list 'gorillalabs.tesla.component.telemetry/enqueue 'gorillalabs.tesla.component.telemetry/telemetry values)
+                (list 'log/debugf "[%s] took %dms." identifier elapsed)
                 result)
           expr)))
 
