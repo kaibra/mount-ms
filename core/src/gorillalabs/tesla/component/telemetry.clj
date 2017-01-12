@@ -2,10 +2,13 @@
 ;;;
 ;;; Sample configuration:
 ;;;
-;;; {:telemetry {:riemann  {:host "127.0.0.2" :port 5555}
-;;;              :host     "app.eu.backend42" ;; leave out for automatic hostname detection
-;;;              :prefix   "app.backend."     ;; automatically prefix all service names
-;;;              :interval 60                 ;; seconds
+;;; {:telemetry {:riemann    {:host "127.0.0.2" :port 5555}
+;;;              :host       "app.eu.backend42" ;; leave out for automatic hostname detection
+;;;              :prefix     "app.backend."     ;; automatically prefix all service names
+;;;              :interval   60                 ;; seconds
+;;;              :queue-size 1000               ;; how many messages can be buffered
+;;;              :threshold  50                 ;; minimum number of milliseconds
+;;;                                             ;; for a timed even to be actually reported
 ;;;              }}
 
 (ns gorillalabs.tesla.component.telemetry
@@ -32,7 +35,7 @@
 (defn- flush-queue [client queue]
   (let [events (drain-queue queue)]
     (when (and client (seq events))
-      (log/infof "Sending %d event(s) to telemetry backend..." (count events))
+      (log/debugf "Sending %d event(s) to telemetry backend..." (count events))
       (riemann/send-events client events))))
 
 (defn- prepare-event [telemetry event]
@@ -57,14 +60,17 @@
   (let [start (gensym)
         result (gensym)
         elapsed (gensym)
-        values (gensym)]
+        values (gensym)
+        threshold (gensym)]
     (list 'if (list :host 'gorillalabs.tesla.component.telemetry/telemetry)
-          (list 'let [start   (list 'System/currentTimeMillis)
-                      result  expr
-                      elapsed (list '- (list 'System/currentTimeMillis) start)
-                      values  (list 'merge props {:service identifier :metric elapsed :unit "ms" :type "timed"})]
-                (list 'log/infof "[%s] took %dms." identifier elapsed)
-                (list 'gorillalabs.tesla.component.telemetry/enqueue 'gorillalabs.tesla.component.telemetry/telemetry values)
+          (list 'let [threshold (list 'get-in 'gorillalabs.tesla.component.telemetry/telemetry [:config :threshold] 50)
+                      start     (list 'System/currentTimeMillis)
+                      result    expr
+                      elapsed   (list '- (list 'System/currentTimeMillis) start)
+                      values    (list 'merge props {:service identifier :metric elapsed :unit "ms" :type "timed"})]
+                (list 'log/debugf "[%s] took %dms." identifier elapsed)
+                (list 'if (list '>= elapsed threshold)
+                      (list 'gorillalabs.tesla.component.telemetry/enqueue 'gorillalabs.tesla.component.telemetry/telemetry values))
                 result)
           expr)))
 
@@ -79,7 +85,7 @@
 (defn- start []
   (log/info "-> starting telemetry")
   (let [config     (config/config config/configuration [:telemetry])
-        queue      (chan (sliding-buffer 100))
+        queue      (chan (sliding-buffer (:queue-size config 1000)))
         killswitch (chan)
         client     (when (:riemann config) (riemann/tcp-client (:riemann config)))]
     (worker killswitch client queue (:interval config 30))
