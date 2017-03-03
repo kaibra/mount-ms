@@ -9,6 +9,8 @@
 ;;;              :queue-size 1000               ;; how many messages can be buffered
 ;;;              :threshold  50                 ;; minimum number of milliseconds
 ;;;                                             ;; for a timed even to be actually reported
+;;;              :tags       [:t1 :t2 :t3]      ;; specify additional tags that are merged into
+;;;                                             ;; every event
 ;;;              }}
 
 (ns gorillalabs.tesla.component.telemetry
@@ -39,11 +41,14 @@
       (riemann/send-events client events))))
 
 (defn- prepare-event [telemetry event]
-  (let [prefix (:prefix (:config telemetry) "")]
+  (let [config (:config telemetry)
+        prefix (:prefix config "")
+        tags   (:tags config [])]
     (-> event
       (assoc :time (now))
       (assoc :host (:host telemetry))
-      (assoc :service (str prefix (:service event))))))
+      (assoc :service (str prefix (:service event)))
+      (update-in [:tags] #(distinct (concat % tags))))))
 
 (defn enqueue [telemetry event]
   (>!! (:queue telemetry) (prepare-event telemetry event)))
