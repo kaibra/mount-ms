@@ -9,7 +9,7 @@
 ;;;              :queue-size 1000               ;; how many messages can be buffered
 ;;;              :threshold  50                 ;; minimum number of milliseconds
 ;;;                                             ;; for a timed even to be actually reported
-;;;              :tags       [:t1 :t2 :t3]      ;; specify additional tags that are merged into
+;;;              :tags       ["t1" "t2" "t3"]   ;; specify additional tags that are merged into
 ;;;                                             ;; every event
 ;;;              }}
 
