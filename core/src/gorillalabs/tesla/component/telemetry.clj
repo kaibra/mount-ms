@@ -104,6 +104,7 @@
   (log/info "<- stopping telemetry")
   (close! (:killswitch telemetry))
   (when-let [client (:r-client telemetry)]
+    (flush-queue client (:queue telemetry))
     (riemann/close! client)))
 
 (mnt/defstate telemetry
