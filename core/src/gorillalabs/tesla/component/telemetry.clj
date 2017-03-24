@@ -19,7 +19,8 @@
             [gorillalabs.tesla.component.configuration :as config]
             [mount.core :as mnt]
             [riemann.client :as riemann])
-  (:import (java.net InetAddress)))
+  (:import (java.net InetAddress))
+  (:refer-clojure :exclude [flush]))
 
 (defn- now []
   (/ (System/currentTimeMillis) 1000))
@@ -59,6 +60,10 @@
 (defn custom [telemetry message]
   (enqueue telemetry message))
 
+(defn flush [telemetry]
+  (when-let [client (:r-client telemetry)]
+    (flush-queue client (:queue telemetry))))
+
 (defmacro timed
   "Wraps expr in a timer and reports the elapsed time as a metric named with identifier."
   [identifier expr & [props]]
@@ -89,10 +94,11 @@
 
 (defn- start []
   (log/info "-> starting telemetry")
-  (let [config     (config/config config/configuration [:telemetry])
-        queue      (chan (sliding-buffer (:queue-size config 1000)))
-        killswitch (chan)
-        client     (when (:riemann config) (riemann/tcp-client (:riemann config)))]
+  (let [config      (config/config config/configuration [:telemetry])
+        riemann-cfg (:riemann config)
+        queue       (chan (sliding-buffer (:queue-size config 1000)))
+        killswitch  (chan)
+        client      (when (:host riemann-cfg) (riemann/tcp-client riemann-cfg))]
     (worker killswitch client queue (:interval config 30))
     {:host       (:host config (localhost))
      :r-client   client
@@ -103,8 +109,8 @@
 (defn- stop [telemetry]
   (log/info "<- stopping telemetry")
   (close! (:killswitch telemetry))
+  (flush telemetry)
   (when-let [client (:r-client telemetry)]
-    (flush-queue client (:queue telemetry))
     (riemann/close! client)))
 
 (mnt/defstate telemetry
