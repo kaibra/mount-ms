@@ -26,7 +26,7 @@ public class KeywordSerializer implements AttributeSerializer<Keyword> {
 	byte[] data = serializer.read(buffer);	
 
 	try (ByteArrayInputStream bais = new ByteArrayInputStream(data);
-	     ObjectInputStream ois = new ObjectInputStream(bais);)
+	     ObjectInputStream ois = new ObjectInputStream(bais))
 	    {
 		result = (Keyword) ois.readObject();
 	} catch (Exception e) {
@@ -41,7 +41,7 @@ public class KeywordSerializer implements AttributeSerializer<Keyword> {
     public void write(WriteBuffer buffer, Keyword attribute) {
 
 	try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(baos);)
+            ObjectOutputStream oos = new ObjectOutputStream(baos))
 	    {
 		oos.writeObject(attribute);
 		byte[] data = baos.toByteArray();
