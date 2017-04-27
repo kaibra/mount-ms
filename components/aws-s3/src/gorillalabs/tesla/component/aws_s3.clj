@@ -22,8 +22,8 @@
     (atom {:credentials credentials})))
 
 (defn store-object!
+   "Stores the object in the object store and returns the generated/provided key. Object can either be an InputStream, a string or a file."
   ([bucket-name store-object]
-   "Stores the object in the object store and returns the generated key. Object can either be an InputStream, a string or a file."
    (let [key (.toString (java.util.UUID/randomUUID))])
     (store-object! bucket-name key store-object))
   ([bucket-name key store-object]
