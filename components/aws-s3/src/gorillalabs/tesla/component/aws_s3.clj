@@ -4,7 +4,6 @@
             [aws.sdk.s3 :as s3]
             [clojure.tools.logging :as log]))
 
-
 ;; TODO add support for multiple stores
 
 (declare store)
@@ -14,7 +13,7 @@
 
 (defn init []
   (let [bucket-names (cfg :create-buckets)
-        credentials (cfg :credentials)]
+        credentials  (cfg :credentials)]
     (log/info "Creating configured buckets")
     (doseq [bucket-name bucket-names]
       (when-not (some #(= % bucket-name) (s3/list-buckets credentials))
@@ -22,14 +21,18 @@
         (s3/create-bucket credentials bucket-name)))
     (atom {:credentials credentials})))
 
-
-
-(defn store-import [bucket-name store-object]
-  "Stores the object in the object store and returns the generated key. Object can either be an InputStream, a string or a file."
-  (let [key (.toString (java.util.UUID/randomUUID))
-        e-tag (.getETag (s3/put-object (:credentials @store) bucket-name key store-object))]
+(defn store-object!
+   "Stores the object in the object store and returns the generated/provided key. Object can either be an InputStream, a string or a file."
+  ([bucket-name store-object]
+   (let [key (.toString (java.util.UUID/randomUUID))])
+    (store-object! bucket-name key store-object))
+  ([bucket-name key store-object]
+   (let [e-tag (.getETag (s3/put-object (:credentials @store) bucket-name key store-object))]
     (log/infof "Uploaded object with key %s and etag %s." key e-tag)
-    key))
+    key)))
+
+(defn object-exists? [bucket-name object-key]
+  (s3/object-exists? (:credentials @store) bucket-name object-key))
 
 ;; TODO error handling
 (defn with-object-stream [bucket-name object-key f]
@@ -39,20 +42,3 @@
 
 (mnt/defstate store
   :start (init))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

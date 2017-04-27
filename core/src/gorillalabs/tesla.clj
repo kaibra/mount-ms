@@ -15,7 +15,7 @@
 (defn wait! [conf]
   (if-let [wait-time (config/config conf [:wait-ms-on-stop])]
     (try
-      (log/info "<- Waiting " wait-time " milliseconds.")
+      (log/info "<- Waiting" wait-time "milliseconds.")
       (Thread/sleep wait-time)
       (catch Exception e (log/error e)))))
 
